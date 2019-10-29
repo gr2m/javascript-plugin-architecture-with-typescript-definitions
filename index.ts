@@ -25,12 +25,12 @@ export class Base {
   static plugin<T extends TestPlugin | TestPlugin[]>(plugin: T) {
     const currentPlugins = this.plugins;
 
-    class NewTest extends this {
+    class BaseWithPlugins extends this {
       static plugins = currentPlugins.concat(plugin);
     }
 
     type Extension = ReturnTypeOf<T>;
-    return NewTest as typeof NewTest & Constructor<Extension>;
+    return BaseWithPlugins as typeof BaseWithPlugins & Constructor<Extension>;
   }
 
   constructor() {
