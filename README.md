@@ -8,7 +8,7 @@
 
 The goal of this repository is to provide a template of a simple plugin Architecture which allows plugins to created and authored as separate npm modules and shared as official or 3rd party plugins.
 
-Usage
+## Usage
 
 ```ts
 import { Base } from "javascript-plugin-architecture-with-typescript-definitions";
@@ -33,6 +33,14 @@ const FooBarTest = Base.plugin([myFooPlugin, myBarPlugin]);
 const fooBarTest = new FooBarTest();
 fooBarTest.foo(); // has full TypeScript intellisense
 fooBarTest.bar(); // has full TypeScript intellisense
+```
+
+The constructor accepts an optional `options` object which is passed to the plugins as second argument and stored in `instance.options`. Default options can be set using `Base.defaults(options)`
+
+```js
+const BaseWithOptions = Base.defaults({ foo: "bar" });
+const instance = new BaseWithOptions();
+instance.options; // {foo: 'bar'}
 ```
 
 ## Credit
