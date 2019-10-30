@@ -1,5 +1,12 @@
+type Options = {
+  [key: string]: unknown;
+};
+
 type ApiExtension = { [key: string]: any };
-type TestPlugin = (instance: Base) => ApiExtension | undefined;
+type TestPlugin = (
+  instance: Base,
+  options: Options
+) => ApiExtension | undefined;
 type Constructor<T> = new (...args: any[]) => T;
 
 /**
@@ -33,12 +40,24 @@ export class Base {
     return BaseWithPlugins as typeof BaseWithPlugins & Constructor<Extension>;
   }
 
-  constructor() {
+  static defaults(defaults: Options) {
+    return class OctokitWithDefaults extends this {
+      constructor(options: Options = {}) {
+        super(Object.assign({}, defaults, options));
+      }
+    };
+  }
+
+  constructor(options: Options = {}) {
+    this.options = options;
+
     // apply plugins
     // https://stackoverflow.com/a/16345172
     const classConstructor = this.constructor as typeof Base;
     classConstructor.plugins.forEach(plugin => {
-      Object.assign(this, plugin(this));
+      Object.assign(this, plugin(this, options));
     });
   }
+
+  options: Options;
 }
