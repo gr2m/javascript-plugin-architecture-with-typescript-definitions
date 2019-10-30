@@ -22,6 +22,7 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "@semantic-release/git": "^7.0.17",
     "@types/jest": "^24.0.21",
     "@types/node": "^12.12.0",
     "jest": "^24.9.0",
@@ -39,5 +40,23 @@
         "lines": 100
       }
     }
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "index.js",
+            "index.d.ts"
+          ],
+          "message": "build(release): index.js & index.d.ts for ${nextRelease.version}\n\n[skip ci]"
+        }
+      ]
+    ]
   }
 }
