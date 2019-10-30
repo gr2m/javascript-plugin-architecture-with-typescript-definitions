@@ -40,4 +40,21 @@ describe("Base", () => {
     expect(defaultsTest.options).toStrictEqual({ foo: "bar" });
     expect(mergedOptionsTest.options).toStrictEqual({ foo: "bar", baz: "daz" });
   });
+
+  it(".plugin().defaults()", () => {
+    const BaseWithPluginAndDefaults = Base.plugin(fooPlugin).defaults({
+      baz: "daz"
+    });
+    const BaseWithDefaultsAndPlugin = Base.defaults({
+      baz: "daz"
+    }).plugin(fooPlugin);
+
+    const instance1 = new BaseWithPluginAndDefaults();
+    const instance2 = new BaseWithDefaultsAndPlugin();
+
+    expect(instance1.foo()).toEqual("foo");
+    expect(instance1.options).toStrictEqual({ baz: "daz" });
+    expect(instance2.foo()).toEqual("foo");
+    expect(instance2.options).toStrictEqual({ baz: "daz" });
+  });
 });
