@@ -25,9 +25,9 @@ export class Base {
   static plugin<T extends TestPlugin | TestPlugin[]>(plugin: T) {
     const currentPlugins = this.plugins;
 
-    class BaseWithPlugins extends this {
+    const BaseWithPlugins = class extends this {
       static plugins = currentPlugins.concat(plugin);
-    }
+    };
 
     type Extension = ReturnTypeOf<T>;
     return BaseWithPlugins as typeof BaseWithPlugins & Constructor<Extension>;
