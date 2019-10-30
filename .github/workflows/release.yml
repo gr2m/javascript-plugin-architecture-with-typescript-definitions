@@ -19,9 +19,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: "git commit index.js index.d.ts -m 'build: index.js & *index.d.ts'
+      - run: "git commit index.js index.d.ts -m 'build: index.js & *index.d.ts
         
-        [skip ci]"
+        [skip ci]'"
       - run: "git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:refs/heads/master"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
