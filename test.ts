@@ -27,4 +27,11 @@ describe("Base", () => {
     expect(fooBarTest.foo()).toEqual("foo");
     expect(fooBarTest.bar()).toEqual("bar");
   });
+  it(".defaults({foo: 'bar'})", () => {
+    const BaseWithDefaults = Base.defaults({ foo: "bar" });
+    const defaultsTest = new BaseWithDefaults();
+    const mergedOptionsTest = new BaseWithDefaults({ baz: "daz" });
+    expect(defaultsTest.options).toStrictEqual({ foo: "bar" });
+    expect(mergedOptionsTest.options).toStrictEqual({ foo: "bar", baz: "daz" });
+  });
 });
