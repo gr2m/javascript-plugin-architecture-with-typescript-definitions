@@ -27,6 +27,12 @@ describe("Base", () => {
     expect(fooBarTest.foo()).toEqual("foo");
     expect(fooBarTest.bar()).toEqual("bar");
   });
+  it(".plugin(fooPlugin).plugin(barPlugin)", () => {
+    const FooBarTest = Base.plugin(fooPlugin).plugin(barPlugin);
+    const fooBarTest = new FooBarTest();
+    expect(fooBarTest.foo()).toEqual("foo");
+    expect(fooBarTest.bar()).toEqual("bar");
+  });
   it(".defaults({foo: 'bar'})", () => {
     const BaseWithDefaults = Base.defaults({ foo: "bar" });
     const defaultsTest = new BaseWithDefaults();
