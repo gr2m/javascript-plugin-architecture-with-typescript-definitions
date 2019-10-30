@@ -1,13 +1,13 @@
 import { Base } from ".";
 
-const fooPlugin = (test: Base): { foo(): "foo" } => {
+const fooPlugin = (test: Base) => {
   console.log("plugin evalutes");
 
   return {
     foo: () => "foo"
   };
 };
-const barPlugin = (test: Base): { bar(): "bar" } => {
+const barPlugin = (test: Base) => {
   console.log("plugin evalutes");
 
   return {
