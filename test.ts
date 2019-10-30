@@ -1,4 +1,4 @@
-import { Base } from ".";
+import { Base } from "./src";
 
 const fooPlugin = (test: Base) => {
   console.log("plugin evalutes");
