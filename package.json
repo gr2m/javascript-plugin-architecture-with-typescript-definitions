@@ -1,6 +1,6 @@
 {
   "name": "javascript-plugin-architecture-with-typescript-definitions",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "Plugin architecture example with full TypeScript support",
   "main": "index.js",
   "scripts": {
