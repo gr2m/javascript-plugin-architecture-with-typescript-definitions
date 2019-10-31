@@ -1,7 +1,10 @@
+declare type Options = {
+    [key: string]: unknown;
+};
 declare type ApiExtension = {
     [key: string]: any;
 };
-declare type TestPlugin = (instance: Base) => ApiExtension | undefined;
+declare type TestPlugin = (instance: Base, options: Options) => ApiExtension | undefined;
 declare type Constructor<T> = new (...args: any[]) => T;
 /**
  * @author https://stackoverflow.com/users/2887218/jcalz
@@ -13,10 +16,36 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> = T extends Any
 export declare class Base {
     static plugins: TestPlugin[];
     static plugin<T extends TestPlugin | TestPlugin[]>(plugin: T): {
-        new (): {};
+        new (options?: Options): {
+            options: Options;
+        };
         plugins: TestPlugin[];
         plugin<T_1 extends TestPlugin | TestPlugin[]>(plugin: T): any & Constructor<ReturnTypeOf<T>>;
+        defaults(defaults: Options): {
+            new (options?: Options): {
+                options: Options;
+            };
+            plugins: TestPlugin[];
+            plugin<T_1 extends TestPlugin | TestPlugin[]>(plugin: T): any & Constructor<ReturnTypeOf<T>>;
+            defaults(defaults: Options): any;
+        };
     } & Constructor<ReturnTypeOf<T>>;
-    constructor();
+    static defaults(defaults: Options): {
+        new (options?: Options): {
+            options: Options;
+        };
+        plugins: TestPlugin[];
+        plugin<T extends TestPlugin | TestPlugin[]>(plugin: T): {
+            new (options?: Options): {
+                options: Options;
+            };
+            plugins: TestPlugin[];
+            plugin<T extends TestPlugin | TestPlugin[]>(plugin: T): any & Constructor<ReturnTypeOf<T>>;
+            defaults(defaults: Options): any;
+        } & Constructor<ReturnTypeOf<T>>;
+        defaults(defaults: Options): any;
+    };
+    constructor(options?: Options);
+    options: Options;
 }
 export {};

@@ -14,13 +14,15 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Base = /** @class */ (function () {
-    function Base() {
+    function Base(options) {
         var _this = this;
+        if (options === void 0) { options = {}; }
+        this.options = options;
         // apply plugins
         // https://stackoverflow.com/a/16345172
         var classConstructor = this.constructor;
         classConstructor.plugins.forEach(function (plugin) {
-            Object.assign(_this, plugin(_this));
+            Object.assign(_this, plugin(_this, options));
         });
     }
     Base.plugin = function (plugin) {
@@ -36,6 +38,16 @@ var Base = /** @class */ (function () {
             _a.plugins = currentPlugins.concat(plugin),
             _a);
         return BaseWithPlugins;
+    };
+    Base.defaults = function (defaults) {
+        return /** @class */ (function (_super) {
+            __extends(OctokitWithDefaults, _super);
+            function OctokitWithDefaults(options) {
+                if (options === void 0) { options = {}; }
+                return _super.call(this, Object.assign({}, defaults, options)) || this;
+            }
+            return OctokitWithDefaults;
+        }(this));
     };
     Base.plugins = [];
     return Base;
