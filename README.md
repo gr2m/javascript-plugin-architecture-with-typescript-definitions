@@ -47,6 +47,8 @@ instance.options; // {foo: 'bar'}
 
 This example was extracted from [`@octokit/core`](https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions). The implementation was made possible by help from [@karol-majewski](https://github.com/karol-majewski) and [@dragomirtitian](https://github.com/dragomirtitian).
 
+A final piece has been figured out by StackOverflow user "hackape": [Chaining static .plugin() class method to extend instance APIs multiple times](https://stackoverflow.com/a/58706699/206879).
+
 ## LICENSE
 
 [ISC](LICENSE)
