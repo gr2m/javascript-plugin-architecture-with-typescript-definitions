@@ -29,7 +29,10 @@ type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> = T extends AnyFunction
 
 export class Base {
   static plugins: TestPlugin[] = [];
-  static plugin<T extends TestPlugin | TestPlugin[]>(plugin: T) {
+  static plugin<
+    S extends Constructor<any> & { plugins: any[] },
+    T extends TestPlugin | TestPlugin[]
+  >(this: S, plugin: T) {
     const currentPlugins = this.plugins;
 
     const BaseWithPlugins = class extends this {
@@ -40,12 +43,14 @@ export class Base {
     return BaseWithPlugins as typeof BaseWithPlugins & Constructor<Extension>;
   }
 
-  static defaults(defaults: Options) {
-    return class OctokitWithDefaults extends this {
-      constructor(options: Options = {}) {
-        super(Object.assign({}, defaults, options));
+  static defaults<S extends Constructor<any>>(this: S, defaults: Options) {
+    const OctokitWithDefaults = class extends this {
+      constructor(...args: any[]) {
+        super(Object.assign({}, defaults, args[0] || {}));
       }
     };
+
+    return OctokitWithDefaults;
   }
 
   constructor(options: Options = {}) {
