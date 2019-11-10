@@ -15,36 +15,19 @@ declare type AnyFunction = (...args: any) => any;
 declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> = T extends AnyFunction ? ReturnType<T> : T extends AnyFunction[] ? UnionToIntersection<ReturnType<T[number]>> : never;
 export declare class Base {
     static plugins: TestPlugin[];
-    static plugin<T extends TestPlugin | TestPlugin[]>(plugin: T): {
-        new (options?: Options): {
-            options: Options;
+    static plugin<S extends Constructor<any> & {
+        plugins: any[];
+    }, T extends TestPlugin | TestPlugin[]>(this: S, plugin: T): {
+        new (...args: any[]): {
+            [x: string]: any;
         };
-        plugins: TestPlugin[];
-        plugin<T_1 extends TestPlugin | TestPlugin[]>(plugin: T): any & Constructor<ReturnTypeOf<T>>;
-        defaults(defaults: Options): {
-            new (options?: Options): {
-                options: Options;
-            };
-            plugins: TestPlugin[];
-            plugin<T_1 extends TestPlugin | TestPlugin[]>(plugin: T): any & Constructor<ReturnTypeOf<T>>;
-            defaults(defaults: Options): any;
+        plugins: any[];
+    } & S & Constructor<ReturnTypeOf<T>>;
+    static defaults<S extends Constructor<any>>(this: S, defaults: Options): {
+        new (...args: any[]): {
+            [x: string]: any;
         };
-    } & Constructor<ReturnTypeOf<T>>;
-    static defaults(defaults: Options): {
-        new (options?: Options): {
-            options: Options;
-        };
-        plugins: TestPlugin[];
-        plugin<T extends TestPlugin | TestPlugin[]>(plugin: T): {
-            new (options?: Options): {
-                options: Options;
-            };
-            plugins: TestPlugin[];
-            plugin<T extends TestPlugin | TestPlugin[]>(plugin: T): any & Constructor<ReturnTypeOf<T>>;
-            defaults(defaults: Options): any;
-        } & Constructor<ReturnTypeOf<T>>;
-        defaults(defaults: Options): any;
-    };
+    } & S;
     constructor(options?: Options);
     options: Options;
 }

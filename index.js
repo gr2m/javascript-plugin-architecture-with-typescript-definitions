@@ -40,14 +40,18 @@ var Base = /** @class */ (function () {
         return BaseWithPlugins;
     };
     Base.defaults = function (defaults) {
-        return /** @class */ (function (_super) {
-            __extends(OctokitWithDefaults, _super);
-            function OctokitWithDefaults(options) {
-                if (options === void 0) { options = {}; }
-                return _super.call(this, Object.assign({}, defaults, options)) || this;
+        var OctokitWithDefaults = /** @class */ (function (_super) {
+            __extends(class_2, _super);
+            function class_2() {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i] = arguments[_i];
+                }
+                return _super.call(this, Object.assign({}, defaults, args[0] || {})) || this;
             }
-            return OctokitWithDefaults;
+            return class_2;
         }(this));
+        return OctokitWithDefaults;
     };
     Base.plugins = [];
     return Base;
