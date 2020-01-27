@@ -23,7 +23,7 @@
   "license": "ISC",
   "devDependencies": {
     "@semantic-release/git": "^7.0.17",
-    "@types/jest": "^24.0.21",
+    "@types/jest": "^25.1.0",
     "@types/node": "^13.1.0",
     "jest": "^24.9.0",
     "semantic-release": "^16.0.0",
