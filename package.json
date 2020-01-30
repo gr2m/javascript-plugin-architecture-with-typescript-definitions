@@ -27,7 +27,7 @@
     "@types/node": "^13.1.0",
     "jest": "^24.9.0",
     "semantic-release": "^17.0.0",
-    "ts-jest": "^24.1.0",
+    "ts-jest": "^25.1.0",
     "typescript": "^3.8.0-dev.20191031"
   },
   "jest": {
