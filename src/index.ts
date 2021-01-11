@@ -33,13 +33,11 @@ export class Base {
     S extends Constructor<any> & { plugins: any[] },
     T1 extends TestPlugin,
     T2 extends TestPlugin[]
-  >(this: S, plugin: T1, ...p2: T2) {
+  >(this: S, plugin1: T1, ...additionalPlugins: T2) {
     const currentPlugins = this.plugins;
     let newPlugins: (TestPlugin | undefined)[] = [
-      ...(plugin instanceof Array
-        ? (plugin as TestPlugin[])
-        : [plugin as TestPlugin]),
-      ...p2,
+      plugin1,
+      ...additionalPlugins,
     ];
 
     const BaseWithPlugins = class extends this {
