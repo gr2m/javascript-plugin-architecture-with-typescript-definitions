@@ -4,15 +4,18 @@ const fooPlugin = (test: Base) => {
   console.log("plugin evalutes");
 
   return {
-    foo: () => "foo"
+    foo: () => "foo",
   };
 };
 const barPlugin = (test: Base) => {
   console.log("plugin evalutes");
 
   return {
-    bar: () => "bar"
+    bar: () => "bar",
   };
+};
+const pluginWithEmptyObjectReturn = (test: Base) => {
+  return {};
 };
 
 describe("Base", () => {
@@ -21,8 +24,18 @@ describe("Base", () => {
     const fooTest = new FooTest();
     expect(fooTest.foo()).toEqual("foo");
   });
-  it(".plugin([fooPlugin, barPlugin])", () => {
-    const FooBarTest = Base.plugin([fooPlugin, barPlugin]);
+  it(".plugin(fooPlugin, barPlugin)", () => {
+    const FooBarTest = Base.plugin(fooPlugin, barPlugin);
+    const fooBarTest = new FooBarTest();
+    expect(fooBarTest.foo()).toEqual("foo");
+    expect(fooBarTest.bar()).toEqual("bar");
+  });
+  it(".plugin(fooPlugin, barPlugin, pluginWithVoidReturn)", () => {
+    const FooBarTest = Base.plugin(
+      fooPlugin,
+      barPlugin,
+      pluginWithEmptyObjectReturn
+    );
     const fooBarTest = new FooBarTest();
     expect(fooBarTest.foo()).toEqual("foo");
     expect(fooBarTest.bar()).toEqual("bar");
@@ -43,10 +56,10 @@ describe("Base", () => {
 
   it(".plugin().defaults()", () => {
     const BaseWithPluginAndDefaults = Base.plugin(fooPlugin).defaults({
-      baz: "daz"
+      baz: "daz",
     });
     const BaseWithDefaultsAndPlugin = Base.defaults({
-      baz: "daz"
+      baz: "daz",
     }).plugin(fooPlugin);
 
     const instance1 = new BaseWithPluginAndDefaults();

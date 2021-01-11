@@ -13,9 +13,9 @@ type Constructor<T> = new (...args: any[]) => T;
  * @author https://stackoverflow.com/users/2887218/jcalz
  * @see https://stackoverflow.com/a/50375286/10325032
  */
-type UnionToIntersection<Union> = (Union extends any
-  ? (argument: Union) => void
-  : never) extends (argument: infer Intersection) => void // tslint:disable-line: no-unused
+type UnionToIntersection<Union> = (
+  Union extends any ? (argument: Union) => void : never
+) extends (argument: infer Intersection) => void // tslint:disable-line: no-unused
   ? Intersection
   : never;
 
@@ -31,16 +31,23 @@ export class Base {
   static plugins: TestPlugin[] = [];
   static plugin<
     S extends Constructor<any> & { plugins: any[] },
-    T extends TestPlugin | TestPlugin[]
-  >(this: S, plugin: T) {
+    T1 extends TestPlugin,
+    T2 extends TestPlugin[]
+  >(this: S, plugin1: T1, ...additionalPlugins: T2) {
     const currentPlugins = this.plugins;
+    let newPlugins: (TestPlugin | undefined)[] = [
+      plugin1,
+      ...additionalPlugins,
+    ];
 
     const BaseWithPlugins = class extends this {
-      static plugins = currentPlugins.concat(plugin);
+      static plugins = currentPlugins.concat(
+        newPlugins.filter((plugin) => !currentPlugins.includes(plugin))
+      );
     };
 
-    type Extension = ReturnTypeOf<T>;
-    return BaseWithPlugins as typeof BaseWithPlugins & Constructor<Extension>;
+    return BaseWithPlugins as typeof BaseWithPlugins &
+      Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
   }
 
   static defaults<S extends Constructor<any>>(this: S, defaults: Options) {
@@ -59,7 +66,7 @@ export class Base {
     // apply plugins
     // https://stackoverflow.com/a/16345172
     const classConstructor = this.constructor as typeof Base;
-    classConstructor.plugins.forEach(plugin => {
+    classConstructor.plugins.forEach((plugin) => {
       Object.assign(this, plugin(this, options));
     });
   }

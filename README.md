@@ -15,13 +15,13 @@ import { Base } from "javascript-plugin-architecture-with-typescript-definitions
 
 function myFooPlugin(instance: Base) {
   return {
-    foo: () => "foo"
+    foo: () => "foo",
   };
 }
 
 function myBarPlugin(instance: Base) {
   return {
-    bar: () => "bar"
+    bar: () => "bar",
   };
 }
 
@@ -29,7 +29,7 @@ const FooTest = Base.plugin(myFooPlugin);
 const fooTest = new FooTest();
 fooTest.foo(); // has full TypeScript intellisense
 
-const FooBarTest = Base.plugin([myFooPlugin, myBarPlugin]);
+const FooBarTest = Base.plugin(myFooPlugin, myBarPlugin);
 const fooBarTest = new FooBarTest();
 fooBarTest.foo(); // has full TypeScript intellisense
 fooBarTest.bar(); // has full TypeScript intellisense
