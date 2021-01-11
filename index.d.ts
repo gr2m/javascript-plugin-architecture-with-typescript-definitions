@@ -17,12 +17,12 @@ export declare class Base {
     static plugins: TestPlugin[];
     static plugin<S extends Constructor<any> & {
         plugins: any[];
-    }, T extends TestPlugin | TestPlugin[]>(this: S, plugin: T): {
+    }, T1 extends TestPlugin, T2 extends TestPlugin[]>(this: S, plugin1: T1, ...additionalPlugins: T2): {
         new (...args: any[]): {
             [x: string]: any;
         };
         plugins: any[];
-    } & S & Constructor<ReturnTypeOf<T>>;
+    } & S & Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
     static defaults<S extends Constructor<any>>(this: S, defaults: Options): {
         new (...args: any[]): {
             [x: string]: any;
