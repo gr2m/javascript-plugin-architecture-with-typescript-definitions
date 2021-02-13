@@ -10,6 +10,8 @@ The goal of this repository is to provide a template of a simple plugin Architec
 
 ## Usage
 
+[Try it in TypeScript's playground editor](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgIQIYGcCmcC+cBmUEIcARAFaoBuGAxlMGDALRgA2ArgObAB2zqKLQAWwGJlowOUTMwDuY4cxgBPMJnT1GLACaZ8fMcAi90pANwAoS-g69Jx3nBAqAYhAgAFTj14AKPnQYVHtMAC4UDEwASkRLODgZKSgnBHiEgg8Iv1iAXgA+MnwPUgAadJwrHGtbexhHZxU0KG9uPgDTYNCItCxYtISk6VT0hIAjQWy8wtIJqDKKqpq7BxM4DCxYAGUYBl4uP3QOMfIJGAigva5+6staEyC4dwgAFQ14XMisADp2Nv8XM9Wr5olZ7p1Mq93nBPrxMHInh43kEclYNphtrs+AdilCgt9cTlQdZwY9ns1kR8vphfj52oCPMC+KVGs0mbxiaT4LiKdDYfDERBeSjiejMVc-DzBJSCR4iWj0JsYDsJVKoDK5vKgA)
+
 ```ts
 import { Base } from "javascript-plugin-architecture-with-typescript-definitions";
 
