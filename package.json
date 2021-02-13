@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "Plugin architecture example with full TypeScript support",
   "main": "index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "build": "tsc src/index.ts --declaration --outDir .",
     "test": "jest --coverage"
