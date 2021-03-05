@@ -8,7 +8,7 @@
     "build": "tsc src/index.ts --declaration --outDir .",
     "test": "jest --coverage"
   },
-  "repository": "https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions",
+  "repository": "github:gr2m/javascript-plugin-architecture-with-typescript-definitions",
   "keywords": [
     "typescript",
     "plugin",
