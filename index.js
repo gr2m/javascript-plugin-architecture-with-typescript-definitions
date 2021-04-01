@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -20,6 +20,7 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
     return r;
 };
 exports.__esModule = true;
+exports.Base = void 0;
 var Base = /** @class */ (function () {
     function Base(options) {
         var _this = this;
@@ -33,11 +34,11 @@ var Base = /** @class */ (function () {
         });
     }
     Base.plugin = function (plugin1) {
+        var _a;
         var additionalPlugins = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             additionalPlugins[_i - 1] = arguments[_i];
         }
-        var _a;
         var currentPlugins = this.plugins;
         var newPlugins = __spreadArrays([
             plugin1
@@ -54,7 +55,7 @@ var Base = /** @class */ (function () {
         return BaseWithPlugins;
     };
     Base.defaults = function (defaults) {
-        var OctokitWithDefaults = /** @class */ (function (_super) {
+        var BaseWitDefaults = /** @class */ (function (_super) {
             __extends(class_2, _super);
             function class_2() {
                 var args = [];
@@ -65,7 +66,7 @@ var Base = /** @class */ (function () {
             }
             return class_2;
         }(this));
-        return OctokitWithDefaults;
+        return BaseWitDefaults;
     };
     Base.plugins = [];
     return Base;

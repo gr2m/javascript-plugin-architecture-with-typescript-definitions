@@ -51,13 +51,13 @@ export class Base {
   }
 
   static defaults<S extends Constructor<any>>(this: S, defaults: Options) {
-    const OctokitWithDefaults = class extends this {
+    const BaseWitDefaults = class extends this {
       constructor(...args: any[]) {
         super(Object.assign({}, defaults, args[0] || {}));
       }
     };
 
-    return OctokitWithDefaults;
+    return BaseWitDefaults;
   }
 
   constructor(options: Options = {}) {
