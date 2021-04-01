@@ -1,15 +1,11 @@
 import { Base } from "./src";
 
 const fooPlugin = (test: Base) => {
-  console.log("plugin evalutes");
-
   return {
     foo: () => "foo",
   };
 };
 const barPlugin = (test: Base) => {
-  console.log("plugin evalutes");
-
   return {
     bar: () => "bar",
   };
