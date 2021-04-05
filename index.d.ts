@@ -2,7 +2,7 @@ declare type Options = {
     [key: string]: unknown;
 };
 declare type ApiExtension = {
-    [key: string]: any;
+    [key: string]: unknown;
 };
 declare type TestPlugin = (instance: Base, options: Options) => ApiExtension | undefined;
 declare type Constructor<T> = new (...args: any[]) => T;
@@ -17,17 +17,10 @@ export declare class Base {
     static plugins: TestPlugin[];
     static plugin<S extends Constructor<any> & {
         plugins: any[];
-    }, T1 extends TestPlugin, T2 extends TestPlugin[]>(this: S, plugin1: T1, ...additionalPlugins: T2): {
-        new (...args: any[]): {
-            [x: string]: any;
-        };
+    }, T1 extends TestPlugin, T2 extends TestPlugin[]>(this: S, plugin1: T1, ...additionalPlugins: T2): S & {
         plugins: any[];
-    } & S & Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
-    static defaults<S extends Constructor<any>>(this: S, defaults: Options): {
-        new (...args: any[]): {
-            [x: string]: any;
-        };
-    } & S;
+    } & Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
+    static defaults<S extends Constructor<any>>(this: S, defaults: Options): S;
     constructor(options?: Options);
     options: Options;
 }
