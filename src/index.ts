@@ -2,7 +2,7 @@ type Options = {
   [key: string]: unknown;
 };
 
-type ApiExtension = { [key: string]: any };
+type ApiExtension = { [key: string]: unknown };
 type TestPlugin = (
   instance: Base,
   options: Options
@@ -46,7 +46,7 @@ export class Base {
       );
     };
 
-    return BaseWithPlugins as typeof BaseWithPlugins &
+    return BaseWithPlugins as typeof this & { plugins: any[] } &
       Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
   }
 
@@ -57,7 +57,7 @@ export class Base {
       }
     };
 
-    return BaseWitDefaults;
+    return BaseWitDefaults as typeof this;
   }
 
   constructor(options: Options = {}) {
