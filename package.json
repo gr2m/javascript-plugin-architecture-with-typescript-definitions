@@ -6,7 +6,9 @@
   "types": "./index.d.ts",
   "scripts": {
     "build": "tsc src/index.ts --declaration --outDir .",
-    "test": "jest --coverage"
+    "test": "npm run -s test:code && npm run -s test:typescript",
+    "test:code": "jest --coverage",
+    "test:typescript": "npx tsc --noEmit --declaration --noUnusedLocals test-typescript.ts"
   },
   "repository": "github:gr2m/javascript-plugin-architecture-with-typescript-definitions",
   "keywords": [
