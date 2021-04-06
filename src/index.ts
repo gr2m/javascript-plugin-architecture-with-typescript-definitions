@@ -27,7 +27,7 @@ type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> = T extends AnyFunction
   ? UnionToIntersection<ReturnType<T[number]>>
   : never;
 
-export class Base {
+export class Base<TOptions extends Options = Options> {
   static plugins: TestPlugin[] = [];
   static plugin<
     S extends Constructor<any> & { plugins: any[] },
@@ -46,21 +46,25 @@ export class Base {
       );
     };
 
-    return BaseWithPlugins as typeof this & { plugins: any[] } &
-      Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
+    return BaseWithPlugins as typeof this & { plugins: any[] } & Constructor<
+        UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>
+      >;
   }
 
-  static defaults<S extends Constructor<any>>(this: S, defaults: Options) {
+  static defaults<
+    TDefaults extends Options,
+    S extends Constructor<Base<TDefaults>>
+  >(this: S, defaults: TDefaults) {
     const BaseWitDefaults = class extends this {
       constructor(...args: any[]) {
         super(Object.assign({}, defaults, args[0] || {}));
       }
     };
 
-    return BaseWitDefaults as typeof this;
+    return BaseWitDefaults as typeof BaseWitDefaults & typeof this;
   }
 
-  constructor(options: Options = {}) {
+  constructor(options: TOptions = {} as TOptions) {
     this.options = options;
 
     // apply plugins
@@ -71,5 +75,5 @@ export class Base {
     });
   }
 
-  options: Options;
+  options: TOptions;
 }
