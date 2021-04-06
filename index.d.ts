@@ -13,15 +13,19 @@ declare type Constructor<T> = new (...args: any[]) => T;
 declare type UnionToIntersection<Union> = (Union extends any ? (argument: Union) => void : never) extends (argument: infer Intersection) => void ? Intersection : never;
 declare type AnyFunction = (...args: any) => any;
 declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> = T extends AnyFunction ? ReturnType<T> : T extends AnyFunction[] ? UnionToIntersection<ReturnType<T[number]>> : never;
-export declare class Base {
+export declare class Base<TOptions extends Options = Options> {
     static plugins: TestPlugin[];
     static plugin<S extends Constructor<any> & {
         plugins: any[];
     }, T1 extends TestPlugin, T2 extends TestPlugin[]>(this: S, plugin1: T1, ...additionalPlugins: T2): S & {
         plugins: any[];
     } & Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
-    static defaults<S extends Constructor<any>>(this: S, defaults: Options): S;
-    constructor(options?: Options);
-    options: Options;
+    static defaults<TDefaults extends Options, S extends Constructor<Base<TDefaults>>>(this: S, defaults: TDefaults): {
+        new (...args: any[]): {
+            options: TDefaults;
+        };
+    } & S;
+    constructor(options?: TOptions);
+    options: TOptions;
 }
 export {};
