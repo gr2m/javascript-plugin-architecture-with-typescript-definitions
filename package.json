@@ -1,10 +1,13 @@
 {
   "name": "javascript-plugin-architecture-with-typescript-definitions",
   "version": "0.0.0-development",
-  "type": "module",
   "description": "Plugin architecture example with full TypeScript support",
+  "type": "module",
   "exports": {
-    "./": "./index.js"
+    ".": "./index.js",
+    "./plugins/foo": "./plugins/foo/index.js",
+    "./plugins/bar": "./plugins/bar/index.js",
+    "./plugins/void": "./plugins/void/index.js"
   },
   "types": "./index.d.ts",
   "scripts": {

@@ -1,20 +1,9 @@
 import { expectType } from "tsd";
 import { Base } from "./index.js";
 
-const fooPlugin = () => {
-  return {
-    foo: "foo",
-  };
-};
-const barPlugin = () => {
-  return {
-    bar: "bar",
-  };
-};
-
-const voidPlugin = () => {
-  // returns void
-};
+import { fooPlugin } from "./plugins/foo/index.js";
+import { barPlugin } from "./plugins/bar/index.js";
+import { voidPlugin } from "./plugins/void/index.js";
 
 const base = new Base();
 
@@ -56,3 +45,6 @@ const baseWithVoidAndNonVoidPlugins = new BaseWithVoidAndNonVoidPlugins();
 
 expectType<string>(baseWithVoidAndNonVoidPlugins.foo);
 expectType<string>(baseWithVoidAndNonVoidPlugins.bar);
+
+// @ts-expect-error unknown properties cannot be used, see #31
+baseWithVoidAndNonVoidPlugins.unknown;
