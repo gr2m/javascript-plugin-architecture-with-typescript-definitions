@@ -2,7 +2,7 @@
 // THIS CODE IS NOT EXECUTED. IT IS JUST FOR TYPECHECKING
 // ************************************************************
 
-import { Base } from "./src";
+import { Base } from "./index";
 
 function isString(what: string) {}
 
