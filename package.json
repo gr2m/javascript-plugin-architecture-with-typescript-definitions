@@ -11,7 +11,7 @@
     "test": "npm run -s test:code && npm run -s test:typescript && npm run -s test:coverage",
     "test:code": "c8 uvu test",
     "test:coverage": "c8 check-coverage",
-    "test:typescript": "npx tsc --noEmit --declaration --noUnusedLocals test-typescript.ts"
+    "test:typescript": "tsd"
   },
   "repository": "github:gr2m/javascript-plugin-architecture-with-typescript-definitions",
   "keywords": [
@@ -29,7 +29,7 @@
   "license": "ISC",
   "devDependencies": {
     "c8": "^7.7.2",
-    "typescript": "^4.0.0",
+    "tsd": "^0.17.0",
     "uvu": "^0.5.1"
   },
   "c8": {
