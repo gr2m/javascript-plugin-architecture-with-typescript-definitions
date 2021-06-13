@@ -5,7 +5,6 @@
   "main": "index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "build": "tsc --declaration",
     "test": "npm run -s test:code && npm run -s test:typescript",
     "test:code": "jest --coverage",
     "test:typescript": "npx tsc --noEmit --declaration --noUnusedLocals test-typescript.ts"
