@@ -1,8 +1,11 @@
 {
   "name": "javascript-plugin-architecture-with-typescript-definitions",
   "version": "0.0.0-development",
+  "type": "module",
   "description": "Plugin architecture example with full TypeScript support",
-  "main": "index.js",
+  "exports": {
+    "./": "./index.js"
+  },
   "types": "./index.d.ts",
   "scripts": {
     "test": "npm run -s test:code && npm run -s test:typescript",
