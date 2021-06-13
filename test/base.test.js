@@ -1,7 +1,7 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { Base } from "./index.js";
+import { Base } from "../index.js";
 
 const fooPlugin = (test) => {
   return {

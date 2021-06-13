@@ -9,7 +9,7 @@
   "types": "./index.d.ts",
   "scripts": {
     "test": "npm run -s test:code && npm run -s test:typescript && npm run -s test:coverage",
-    "test:code": "c8 node test.js",
+    "test:code": "c8 uvu test",
     "test:coverage": "c8 check-coverage",
     "test:typescript": "npx tsc --noEmit --declaration --noUnusedLocals test-typescript.ts"
   },
