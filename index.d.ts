@@ -4,10 +4,8 @@ declare type Options = {
 declare type ApiExtension = {
   [key: string]: unknown;
 };
-declare type TestPlugin = (
-  instance: Base,
-  options: Options
-) => ApiExtension | undefined;
+declare type Plugin = (instance: Base, options: Options) => ApiExtension | void;
+
 declare type Constructor<T> = new (...args: any[]) => T;
 /**
  * @author https://stackoverflow.com/users/2887218/jcalz
@@ -27,13 +25,13 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
     : never;
 
 export declare class Base<TOptions extends Options = Options> {
-  static plugins: TestPlugin[];
+  static plugins: Plugin[];
   static plugin<
     S extends Constructor<any> & {
       plugins: any[];
     },
-    T1 extends TestPlugin,
-    T2 extends TestPlugin[]
+    T1 extends Plugin,
+    T2 extends Plugin[]
   >(
     this: S,
     plugin1: T1,
