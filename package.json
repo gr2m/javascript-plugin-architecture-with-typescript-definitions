@@ -42,5 +42,10 @@
     "extends": [
       "github>gr2m/.github"
     ]
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
   }
 }
