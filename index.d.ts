@@ -21,7 +21,7 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
   T extends AnyFunction
     ? ReturnType<T>
     : T extends AnyFunction[]
-    ? UnionToIntersection<ReturnType<T[number]>>
+    ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
     : never;
 
 export declare class Base<TOptions extends Options = Options> {
