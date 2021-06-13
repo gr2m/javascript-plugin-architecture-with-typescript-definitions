@@ -1,10 +1,16 @@
-declare type Options = {
-  [key: string]: unknown;
-};
+export declare namespace Base {
+  type Options = {
+    [key: string]: unknown;
+  };
+}
+
 declare type ApiExtension = {
   [key: string]: unknown;
 };
-declare type Plugin = (instance: Base, options: Options) => ApiExtension | void;
+declare type Plugin = (
+  instance: Base,
+  options: Base.Options
+) => ApiExtension | void;
 
 declare type Constructor<T> = new (...args: any[]) => T;
 /**
@@ -24,7 +30,7 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
     ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
     : never;
 
-export declare class Base<TOptions extends Options = Options> {
+export declare class Base<TOptions extends Base.Options = Base.Options> {
   static plugins: Plugin[];
   static plugin<
     S extends Constructor<any> & {
@@ -40,7 +46,7 @@ export declare class Base<TOptions extends Options = Options> {
     plugins: any[];
   } & Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
   static defaults<
-    TDefaults extends Options,
+    TDefaults extends Base.Options,
     S extends Constructor<Base<TDefaults>>
   >(
     this: S,
