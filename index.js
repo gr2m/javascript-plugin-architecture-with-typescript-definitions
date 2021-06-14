@@ -1,6 +1,7 @@
 export class Base {
   constructor(options = {}) {
-    this.options = options;
+    const { version, ...opts } = options;
+    this.options = opts;
     this.constructor.plugins.forEach((plugin) => {
       Object.assign(this, plugin(this, options));
     });

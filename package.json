@@ -7,7 +7,8 @@
     ".": "./index.js",
     "./plugins/foo": "./plugins/foo/index.js",
     "./plugins/bar": "./plugins/bar/index.js",
-    "./plugins/void": "./plugins/void/index.js"
+    "./plugins/void": "./plugins/void/index.js",
+    "./plugins/complex": "./plugins/complex/index.js"
   },
   "types": "./index.d.ts",
   "scripts": {

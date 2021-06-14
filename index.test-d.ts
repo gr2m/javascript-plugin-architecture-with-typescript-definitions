@@ -6,13 +6,20 @@ import { barPlugin } from "./plugins/bar/index.js";
 import { voidPlugin } from "./plugins/void/index.js";
 import { withOptionsPlugin } from "./plugins/with-options";
 
-const base = new Base();
+const base = new Base({
+  version: "1.2.3",
+});
+expectType<string>(base.version);
+
+// @ts-expect-error version should be excluded from options
+expectType<string>(base.options.version);
 
 // @ts-expect-error unknown properties cannot be used, see #31
 base.unknown;
 
 const FooBase = Base.plugin(fooPlugin).defaults({
   default: "value",
+  version: "1.2.3",
 });
 const fooBase = new FooBase({
   option: "value",
@@ -20,6 +27,10 @@ const fooBase = new FooBase({
 
 expectType<string>(fooBase.options.default);
 expectType<string>(fooBase.options.option);
+
+// @ts-expect-error "version" is not set on .options
+expectType<string>(fooBase.options.version);
+
 expectType<string>(fooBase.foo);
 
 const BaseWithVoidPlugin = Base.plugin(voidPlugin);
@@ -52,5 +63,13 @@ baseWithVoidAndNonVoidPlugins.unknown;
 
 const BaseWithOptionsPlugin = Base.plugin(withOptionsPlugin);
 const baseWithOptionsPlugin = new BaseWithOptionsPlugin();
-
 expectType<string>(baseWithOptionsPlugin.getFooOption());
+
+const BaseWithComplexPlugin = Base.plugin(complexPlugin);
+const baseWithComplexPlugin = new BaseWithComplexPlugin({
+  foo: "bar",
+});
+
+expectType<string>(baseWithComplexPlugin.complex.foo);
+expectType<string>(baseWithComplexPlugin.complex.bar);
+expectType<string>(baseWithComplexPlugin.complex.getFooOption());
