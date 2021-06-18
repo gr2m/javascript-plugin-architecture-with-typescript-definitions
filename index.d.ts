@@ -1,7 +1,7 @@
-export declare namespace Base {
-  type Options = {
+export namespace Base {
+  interface Options {
     [key: string]: unknown;
-  };
+  }
 }
 
 declare type ApiExtension = {
