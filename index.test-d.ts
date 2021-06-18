@@ -4,6 +4,7 @@ import { Base } from "./index.js";
 import { fooPlugin } from "./plugins/foo/index.js";
 import { barPlugin } from "./plugins/bar/index.js";
 import { voidPlugin } from "./plugins/void/index.js";
+import { withOptionsPlugin } from "./plugins/with-options";
 
 const base = new Base();
 
@@ -48,3 +49,8 @@ expectType<string>(baseWithVoidAndNonVoidPlugins.bar);
 
 // @ts-expect-error unknown properties cannot be used, see #31
 baseWithVoidAndNonVoidPlugins.unknown;
+
+const BaseWithOptionsPlugin = Base.plugin(withOptionsPlugin);
+const baseWithOptionsPlugin = new BaseWithOptionsPlugin();
+
+expectType<string>(baseWithOptionsPlugin.getFooOption());
