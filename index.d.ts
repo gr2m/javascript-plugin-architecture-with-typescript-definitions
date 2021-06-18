@@ -1,5 +1,6 @@
-export namespace Base {
+export declare namespace Base {
   interface Options {
+    version: string;
     [key: string]: unknown;
   }
 }
@@ -56,7 +57,7 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
       options: TDefaults;
     };
   } & S;
-  constructor(options?: TOptions);
+  constructor(options: TOptions);
   options: TOptions;
 }
 export {};
