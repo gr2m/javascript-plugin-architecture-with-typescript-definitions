@@ -5,7 +5,7 @@
 export function withOptionsPlugin(base, options) {
   return {
     getFooOption() {
-      return options.foo;
+      return options.foo || "my default";
     },
   };
 }

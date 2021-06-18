@@ -1,10 +1,17 @@
+// https://www.typescriptlang.org/docs/handbook/declaration-files/templates/module-plugin-d-ts.html
 import { Base } from "../..";
 
-// TODO: add "foo" to Base.Options type
+declare module "../.." {
+  namespace Base {
+    interface Options {
+      foo?: string;
+    }
+  }
+}
 
 export function withOptionsPlugin(
   base: Base,
   options: Base.Options
 ): {
-  getFooOption: () => Base.Options["foo"];
+  getFooOption: () => Required<Base.Options>["foo"];
 };
