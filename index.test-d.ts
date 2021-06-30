@@ -69,7 +69,7 @@ expectType<string>(baseWithVoidAndNonVoidPlugins.bar);
 baseWithVoidAndNonVoidPlugins.unknown;
 
 const BaseWithOptionsPlugin = Base.plugin(withOptionsPlugin);
-const baseWithOptionsPlugin = new BaseWithOptionsPlugin();
+const baseWithOptionsPlugin = new BaseWithOptionsPlugin({});
 expectType<string>(baseWithOptionsPlugin.getFooOption());
 
 const BaseWithComplexPlugin = Base.plugin(complexPlugin);
