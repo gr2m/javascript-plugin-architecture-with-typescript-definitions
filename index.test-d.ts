@@ -5,6 +5,7 @@ import { fooPlugin } from "./plugins/foo/index.js";
 import { barPlugin } from "./plugins/bar/index.js";
 import { voidPlugin } from "./plugins/void/index.js";
 import { withOptionsPlugin } from "./plugins/with-options";
+import { complexPlugin } from "./plugins/complex";
 
 const base = new Base({
   version: "1.2.3",
