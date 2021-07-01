@@ -5,6 +5,8 @@ export declare namespace Base {
   }
 }
 
+type Defaults = Partial<Base.Options>;
+
 declare type ApiExtension = {
   [key: string]: unknown;
 };
@@ -51,7 +53,7 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
     S extends Constructor<Base<TDefaults>>
   >(
     this: S,
-    defaults: TDefaults
+    defaults: Partial<TDefaults>
   ): {
     new (...args: any[]): {
       options: TDefaults;

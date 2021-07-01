@@ -13,6 +13,10 @@ const base = new Base({
 // @ts-expect-error unknown properties cannot be used, see #31
 base.unknown;
 
+const BaseWithDefaults = Base.defaults({
+  // there should be no required options
+});
+
 const FooBase = Base.plugin(fooPlugin).defaults({
   default: "value",
   version: "1.2.3",
@@ -60,6 +64,8 @@ expectType<string>(baseWithVoidAndNonVoidPlugins.bar);
 baseWithVoidAndNonVoidPlugins.unknown;
 
 const BaseWithOptionsPlugin = Base.plugin(withOptionsPlugin);
-const baseWithOptionsPlugin = new BaseWithOptionsPlugin();
+const baseWithOptionsPlugin = new BaseWithOptionsPlugin({
+  version: "1.2.3",
+});
 
 expectType<string>(baseWithOptionsPlugin.getFooOption());
