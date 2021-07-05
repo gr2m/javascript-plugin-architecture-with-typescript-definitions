@@ -1,43 +1,55 @@
-type Optional<T extends object, K extends string | number | symbol> = Omit<
-  T,
-  K
-> &
-  Partial<Pick<T, keyof T & K>>;
+// <utils>
+// by Dima Parzhitsky https://github.com/parzh (https://stackoverflow.com/a/68254847/206879)
+type WithOptionalKeys<
+  OriginalObject extends object,
+  OptionalKey extends keyof OriginalObject = never
+> = Omit<OriginalObject, OptionalKey> &
+  Partial<Pick<OriginalObject, OptionalKey>>;
+
+type KeyOfByValue<Obj extends object, Value> = {
+  [Key in keyof Obj]: Obj[Key] extends Value ? Key : never;
+}[keyof Obj];
+
+type RequiredKeys<Obj extends object> = Exclude<
+  KeyOfByValue<Obj, Exclude<Obj[keyof Obj], undefined>>,
+  undefined
+>;
+
+type OptionalParamIfEmpty<Obj extends object> = RequiredKeys<Obj> extends never
+  ? [Obj?]
+  : [Obj];
+// </utils>
 
 interface Options {
   version: string;
+  customDefault?: string;
+  customOption?: string;
 }
 
-type Constructor<T> = new (...args: any[]) => T;
+interface Constructor<Params extends object, Instance extends object = object> {
+  new (...args: OptionalParamIfEmpty<Params>): Instance;
+}
 
-class Base<
-  TDefaults extends Partial<Options>,
-  TOptions extends Optional<Options, keyof TDefaults>
-> {
-  static defaults<
-    TDefaultsOptions extends Partial<Options> & Record<string, unknown>,
-    TOptionalOptions extends Optional<Options, keyof TDefaultsOptions>,
-    S extends Constructor<Base<TDefaultsOptions, TOptionalOptions>>
-  >(
-    this: S,
-    defaults: TDefaultsOptions
-  ): {
-    new (...args: any[]): {
-      options: TOptionalOptions;
-    };
-  } & S {
-    return class extends this {
-      constructor(...args: any[]) {
-        super(Object.assign({}, defaults, args[0] || {}));
+class Base {
+  static defaults<OptionalKey extends keyof Options>(
+    defaults: { [Key in OptionalKey]: Options[Key] }
+  ): Constructor<WithOptionalKeys<Options, OptionalKey>, Base> {
+    return class BaseWithDefaults extends Base {
+      constructor(
+        ...[partialParams]: OptionalParamIfEmpty<
+          WithOptionalKeys<Options, OptionalKey>
+        >
+      ) {
+        super({ ...defaults, ...partialParams } as Options);
       }
     };
   }
 
-  constructor(options: TOptions & Record<string, unknown>) {
+  public options: Options;
+
+  constructor(options: Options) {
     this.options = options;
   }
-
-  options: TOptions;
 }
 
 const test = new Base({
