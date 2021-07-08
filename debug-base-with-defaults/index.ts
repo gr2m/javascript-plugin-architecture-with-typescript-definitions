@@ -27,20 +27,24 @@ interface Options {
 }
 
 interface Constructor<Params extends object, Instance extends object = object> {
-  new (...args: OptionalParamIfEmpty<Params>): Instance;
+  new (...args: any[]): Instance;
+  // new (...args: OptionalParamIfEmpty<Params>): Instance;
 }
 
 class Base {
-  static defaults<OptionalKey extends keyof Options>(
-    defaults: { [Key in OptionalKey]: Options[Key] }
-  ): Constructor<WithOptionalKeys<Options, OptionalKey>, Base> {
-    return class BaseWithDefaults extends Base {
+  static defaults<
+    OptionalKey extends keyof Options,
+    S extends Constructor<WithOptionalKeys<Options, OptionalKey>, Base>
+  >(this: S, defaults: { [Key in OptionalKey]: Options[Key] }): S {
+    return class extends this {
       constructor(
         ...[partialParams]: OptionalParamIfEmpty<
           WithOptionalKeys<Options, OptionalKey>
         >
-      ) {
-        super({ ...defaults, ...partialParams } as Options);
+      );
+
+      constructor(...args: any[]) {
+        super({ ...defaults, ...args[0] } as Options);
       }
     };
   }
@@ -73,3 +77,7 @@ const testWithDefaults = new MyBaseWithVersion({
 testWithDefaults.options.version;
 testWithDefaults.options.customDefault;
 testWithDefaults.options.customOption;
+
+const MyCascadedBase = Base.defaults({ customDefault: "1" }).defaults({
+  version: "1.2.3",
+});

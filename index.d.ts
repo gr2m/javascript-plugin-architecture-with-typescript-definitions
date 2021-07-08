@@ -5,8 +5,6 @@ export declare namespace Base {
   }
 }
 
-type Defaults = Partial<Base.Options>;
-
 declare type ApiExtension = {
   [key: string]: unknown;
 };
