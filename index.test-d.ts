@@ -6,13 +6,20 @@ import { barPlugin } from "./plugins/bar/index.js";
 import { voidPlugin } from "./plugins/void/index.js";
 import { withOptionsPlugin } from "./plugins/with-options";
 
-const base = new Base();
+const base = new Base({
+  version: "1.2.3",
+});
 
 // @ts-expect-error unknown properties cannot be used, see #31
 base.unknown;
 
+const BaseWithDefaults = Base.defaults({
+  // there should be no required options
+});
+
 const FooBase = Base.plugin(fooPlugin).defaults({
   default: "value",
+  version: "1.2.3",
 });
 const fooBase = new FooBase({
   option: "value",
@@ -23,13 +30,17 @@ expectType<string>(fooBase.options.option);
 expectType<string>(fooBase.foo);
 
 const BaseWithVoidPlugin = Base.plugin(voidPlugin);
-const baseWithVoidPlugin = new BaseWithVoidPlugin();
+const baseWithVoidPlugin = new BaseWithVoidPlugin({
+  version: "1.2.3",
+});
 
 // @ts-expect-error unknown properties cannot be used, see #31
 baseWithVoidPlugin.unknown;
 
 const BaseWithFooAndBarPlugins = Base.plugin(barPlugin, fooPlugin);
-const baseWithFooAndBarPlugins = new BaseWithFooAndBarPlugins();
+const baseWithFooAndBarPlugins = new BaseWithFooAndBarPlugins({
+  version: "1.2.3",
+});
 
 expectType<string>(baseWithFooAndBarPlugins.foo);
 expectType<string>(baseWithFooAndBarPlugins.bar);
@@ -42,7 +53,9 @@ const BaseWithVoidAndNonVoidPlugins = Base.plugin(
   voidPlugin,
   fooPlugin
 );
-const baseWithVoidAndNonVoidPlugins = new BaseWithVoidAndNonVoidPlugins();
+const baseWithVoidAndNonVoidPlugins = new BaseWithVoidAndNonVoidPlugins({
+  version: "1.2.3",
+});
 
 expectType<string>(baseWithVoidAndNonVoidPlugins.foo);
 expectType<string>(baseWithVoidAndNonVoidPlugins.bar);
@@ -51,6 +64,8 @@ expectType<string>(baseWithVoidAndNonVoidPlugins.bar);
 baseWithVoidAndNonVoidPlugins.unknown;
 
 const BaseWithOptionsPlugin = Base.plugin(withOptionsPlugin);
-const baseWithOptionsPlugin = new BaseWithOptionsPlugin();
+const baseWithOptionsPlugin = new BaseWithOptionsPlugin({
+  version: "1.2.3",
+});
 
 expectType<string>(baseWithOptionsPlugin.getFooOption());

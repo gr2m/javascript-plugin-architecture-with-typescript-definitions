@@ -1,5 +1,6 @@
-export namespace Base {
+export declare namespace Base {
   interface Options {
+    version: string;
     [key: string]: unknown;
   }
 }
@@ -32,6 +33,26 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
 
 export declare class Base<TOptions extends Base.Options = Base.Options> {
   static plugins: Plugin[];
+
+  /**
+   * Pass one or multiple plugin functions to extend the `Base` class.
+   * The instance of the new class will be extended with any keys returned by the passed plugins.
+   * Pass one argument per plugin function.
+   *
+   * ```js
+   * export function helloWorld() {
+   *   return {
+   *     helloWorld () {
+   *       console.log('Hello world!');
+   *     }
+   *   };
+   * }
+   *
+   * const MyBase = Base.plugin(helloWorld);
+   * const base = new MyBase();
+   * base.helloWorld(); // `base.helloWorld` is typed as function
+   * ```
+   */
   static plugin<
     S extends Constructor<any> & {
       plugins: any[];
@@ -45,18 +66,33 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
   ): S & {
     plugins: any[];
   } & Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
+
+  /**
+   * Set defaults for the constructor
+   *
+   * ```js
+   * const MyBase = Base.defaults({ version: '1.0.0', otherDefault: 'value' });
+   * const base = new MyBase({ option: 'value' }); // `version` option is not required
+   * base.options // typed as `{ version: string, otherDefault: string, option: string }`
+   * ```
+   */
   static defaults<
     TDefaults extends Base.Options,
     S extends Constructor<Base<TDefaults>>
   >(
     this: S,
-    defaults: TDefaults
+    defaults: Partial<TDefaults>
   ): {
     new (...args: any[]): {
       options: TDefaults;
     };
   } & S;
-  constructor(options?: TOptions);
+
+  /**
+   * options passed to the constructor as constructor defaults
+   */
   options: TOptions;
+
+  constructor(options: TOptions);
 }
 export {};
