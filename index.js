@@ -16,8 +16,11 @@ export class Base {
   }
   static defaults(defaults) {
     return class extends this {
-      constructor(...args) {
-        super(Object.assign({}, defaults, args[0] || {}));
+      constructor(options) {
+        super({
+          ...defaults,
+          ...options,
+        });
       }
     };
   }

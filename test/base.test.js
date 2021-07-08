@@ -36,6 +36,13 @@ test(".defaults({foo: 'bar'})", () => {
   assert.equal(defaultsTest.options, { foo: "bar" });
   assert.equal(mergedOptionsTest.options, { foo: "bar", baz: "daz" });
 });
+test(".defaults({one: 1}).defaults({two: 2})", () => {
+  const BaseWithDefaults = Base.defaults({ one: 1 }).defaults({ two: 2 });
+  const defaultsTest = new BaseWithDefaults();
+  const mergedOptionsTest = new BaseWithDefaults({ three: 3 });
+  assert.equal(defaultsTest.options, { one: 1, two: 2 });
+  assert.equal(mergedOptionsTest.options, { one: 1, two: 2, three: 3 });
+});
 
 test(".plugin().defaults()", () => {
   const BaseWithPluginAndDefaults = Base.plugin(fooPlugin).defaults({
