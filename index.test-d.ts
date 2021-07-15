@@ -167,11 +167,11 @@ expectType<{
 
 const baseLevelFour = new BaseLevelFour();
 
+// See the node on static defaults in index.d.ts for why defaultFour is missing
+// .options from .defaults() is only supported until a depth of 4
 expectType<{
   version: string;
   defaultOne: string;
   defaultTwo: number;
   defaultThree: string[];
-  defaultFour: number;
-  // @ts-expect-error - .options from .defaults() is only supported until a depth of 4
 }>({ ...baseLevelFour.options });
