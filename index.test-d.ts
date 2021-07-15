@@ -154,3 +154,24 @@ const baseWithOptionsPlugin = new BaseWithOptionsPlugin({
 
 expectType<string>(baseWithOptionsPlugin.getFooOption());
 
+// Test depth limits of `.defaults()` chaining
+const BaseLevelFour = BaseLevelThree.defaults({ defaultFour: 4 });
+
+expectType<{
+  version: string;
+  defaultOne: string;
+  defaultTwo: number;
+  defaultThree: string[];
+  defaultFour: number;
+}>({ ...BaseLevelFour.defaultOptions });
+
+const baseLevelFour = new BaseLevelFour();
+
+expectType<{
+  version: string;
+  defaultOne: string;
+  defaultTwo: number;
+  defaultThree: string[];
+  defaultFour: number;
+  // @ts-expect-error - .options from .defaults() is only supported until a depth of 4
+}>({ ...baseLevelFour.options });
