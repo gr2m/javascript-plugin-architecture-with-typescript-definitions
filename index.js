@@ -21,7 +21,7 @@ export class Base {
         super(Object.assign({}, defaults, args[0] || {}));
       }
 
-      static defaultOptions = defaults;
+      static defaultOptions = { ...defaults, ...this.defaultOptions };
     };
   }
 
