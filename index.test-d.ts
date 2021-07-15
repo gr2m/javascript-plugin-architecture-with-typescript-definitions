@@ -192,30 +192,30 @@ const baseWithChainedDefaultsAndPlugins =
 
 expectType<string>(baseWithChainedDefaultsAndPlugins.foo);
 
-// const BaseWithManyChainedDefaultsAndPlugins = Base.defaults({
-//   defaultOne: "value",
-// })
-//   .plugin(fooPlugin, barPlugin, voidPlugin)
-//   .defaults({
-//     defaultTwo: 0,
-//   })
-//   .plugin(withOptionsPlugin)
-//   .defaults({
-//     defaultThree: ["a", "b", "c"],
-//   });
+const BaseWithManyChainedDefaultsAndPlugins = Base.defaults({
+  defaultOne: "value",
+})
+  .plugin(fooPlugin, barPlugin, voidPlugin)
+  .defaults({
+    defaultTwo: 0,
+  })
+  .plugin(withOptionsPlugin)
+  .defaults({
+    defaultThree: ["a", "b", "c"],
+  });
 
-// expectType<{
-//   defaultOne: string;
-//   defaultTwo: number;
-//   defaultThree: string[];
-// }>({ ...BaseWithManyChainedDefaultsAndPlugins.defaultOptions });
+expectType<{
+  defaultOne: string;
+  defaultTwo: number;
+  defaultThree: string[];
+}>({ ...BaseWithManyChainedDefaultsAndPlugins.defaultOptions });
 
-// const baseWithManyChainedDefaultsAndPlugins =
-//   new BaseWithManyChainedDefaultsAndPlugins({
-//     version: "1.2.3",
-//     foo: "bar",
-//   });
+const baseWithManyChainedDefaultsAndPlugins =
+  new BaseWithManyChainedDefaultsAndPlugins({
+    version: "1.2.3",
+    foo: "bar",
+  });
 
-// expectType<string>(baseWithManyChainedDefaultsAndPlugins.foo);
-// expectType<string>(baseWithManyChainedDefaultsAndPlugins.bar);
-// expectType<string>(baseWithManyChainedDefaultsAndPlugins.getFooOption());
+expectType<string>(baseWithManyChainedDefaultsAndPlugins.foo);
+expectType<string>(baseWithManyChainedDefaultsAndPlugins.bar);
+expectType<string>(baseWithManyChainedDefaultsAndPlugins.getFooOption());

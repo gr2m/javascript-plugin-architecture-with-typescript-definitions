@@ -99,27 +99,27 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    */
   static defaults<
     PredefinedOptionsOne,
-    Class extends Constructor<Base<Base.Options & PredefinedOptionsOne>> & ClassWithPlugins
+    ClassOne extends Constructor<Base<Base.Options & PredefinedOptionsOne>> & ClassWithPlugins
   >(
-    this: Class,
+    this: ClassOne,
     defaults: PredefinedOptionsOne
-  ): ConstructorRequiringVersion<Class, PredefinedOptionsOne> & {
-    defaults<PredefinedOptionsTwo>(
-      this: Class,
+  ): ConstructorRequiringVersion<ClassOne, PredefinedOptionsOne> & {
+    defaults<ClassTwo, PredefinedOptionsTwo>(
+      this: ClassTwo,
       defaults: PredefinedOptionsTwo
     ): ConstructorRequiringVersion<
-      Class,
+      ClassOne & ClassTwo,
       PredefinedOptionsOne & PredefinedOptionsTwo
     > & {
-      defaults<PredefinedOptionsThree>(
-        this: Class,
+      defaults<ClassThree, PredefinedOptionsThree>(
+        this: ClassThree,
         defaults: PredefinedOptionsThree
       ): ConstructorRequiringVersion<
-        Class,
+        ClassOne & ClassTwo & ClassThree,
         PredefinedOptionsOne & PredefinedOptionsTwo & PredefinedOptionsThree
-      > & Class;
-    } & Class;
-  } & Class;
+      > & ClassOne & ClassTwo & ClassThree;
+    } & ClassOne & ClassTwo;
+  } & ClassOne;
 
   static defaultOptions: {};
 
