@@ -31,7 +31,11 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
     ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
     : never;
 
-type ConstructorRequiringVersion<Class, PredefinedOptions> = {
+type ClassWithPlugins = Constructor<any> & {
+  plugins: any[];
+};
+
+type ConstructorRequiringVersion<Class extends ClassWithPlugins, PredefinedOptions> = {
   defaultOptions: PredefinedOptions;
 } & (PredefinedOptions extends { version: string }
   ? {
@@ -68,18 +72,14 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    * ```
    */
   static plugin<
-    S extends Constructor<any> & {
-      plugins: any[];
-    },
-    T1 extends Plugin,
-    T2 extends Plugin[]
+    Class extends ClassWithPlugins,
+    Plugins extends [Plugin, ...Plugin[]],
   >(
-    this: S,
-    plugin1: T1,
-    ...additionalPlugins: T2
-  ): S & {
-    plugins: any[];
-  } & Constructor<UnionToIntersection<ReturnTypeOf<T1> & ReturnTypeOf<T2>>>;
+    this: Class,
+    ...plugins: Plugins,
+  ): Class & {
+    plugins: [Class['plugins'], ...Plugins];
+  } & Constructor<UnionToIntersection<ReturnTypeOf<Plugins>>>;
 
   /**
    * Set defaults for the constructor
@@ -99,7 +99,7 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    */
   static defaults<
     PredefinedOptionsOne,
-    Class extends Constructor<Base<Base.Options & PredefinedOptionsOne>>
+    Class extends Constructor<Base<Base.Options & PredefinedOptionsOne>> & ClassWithPlugins
   >(
     this: Class,
     defaults: PredefinedOptionsOne
@@ -117,8 +117,7 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
       ): ConstructorRequiringVersion<
         Class,
         PredefinedOptionsOne & PredefinedOptionsTwo & PredefinedOptionsThree
-      > &
-        Class;
+      > & Class;
     } & Class;
   } & Class;
 

@@ -175,3 +175,47 @@ expectType<{
   defaultTwo: number;
   defaultThree: string[];
 }>({ ...baseLevelFour.options });
+
+const BaseWithChainedDefaultsAndPlugins = Base
+  .defaults({
+    defaultOne: "value",
+  })
+  .plugin(fooPlugin)
+  .defaults({
+    defaultTwo: 0,
+  });
+
+const baseWithChainedDefaultsAndPlugins =
+  new BaseWithChainedDefaultsAndPlugins({
+    version: "1.2.3",
+  });
+
+expectType<string>(baseWithChainedDefaultsAndPlugins.foo);
+
+// const BaseWithManyChainedDefaultsAndPlugins = Base.defaults({
+//   defaultOne: "value",
+// })
+//   .plugin(fooPlugin, barPlugin, voidPlugin)
+//   .defaults({
+//     defaultTwo: 0,
+//   })
+//   .plugin(withOptionsPlugin)
+//   .defaults({
+//     defaultThree: ["a", "b", "c"],
+//   });
+
+// expectType<{
+//   defaultOne: string;
+//   defaultTwo: number;
+//   defaultThree: string[];
+// }>({ ...BaseWithManyChainedDefaultsAndPlugins.defaultOptions });
+
+// const baseWithManyChainedDefaultsAndPlugins =
+//   new BaseWithManyChainedDefaultsAndPlugins({
+//     version: "1.2.3",
+//     foo: "bar",
+//   });
+
+// expectType<string>(baseWithManyChainedDefaultsAndPlugins.foo);
+// expectType<string>(baseWithManyChainedDefaultsAndPlugins.bar);
+// expectType<string>(baseWithManyChainedDefaultsAndPlugins.getFooOption());
