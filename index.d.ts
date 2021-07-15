@@ -26,16 +26,16 @@ declare type UnionToIntersection<Union> = (
 declare type AnyFunction = (...args: any) => any;
 declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
   T extends AnyFunction
-    ? ReturnType<T>
-    : T extends AnyFunction[]
-    ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
-    : never;
+  ? ReturnType<T>
+  : T extends AnyFunction[]
+  ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
+  : never;
 
 type ConstructorRequiringVersion<Class, PredefinedOptions> =
   { defaultOptions: PredefinedOptions } & (
     PredefinedOptions extends { version: string }
-      ? { new <NowProvided>(options?: NowProvided): Class & { options: NowProvided & PredefinedOptions }; }
-      : { new <NowProvided>(options: Base.Options & NowProvided): Class & { options: NowProvided & PredefinedOptions }; }
+    ? { new <NowProvided>(options?: NowProvided): Class & { options: NowProvided & PredefinedOptions }; }
+    : { new <NowProvided>(options: Base.Options & NowProvided): Class & { options: NowProvided & PredefinedOptions }; }
   );
 
 export declare class Base<TOptions extends Base.Options = Base.Options> {
@@ -85,7 +85,7 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    * @remarks
    * Ideally, we would want to make this infinitely recursive: allowing any number of 
    * .defaults({ ... }).defaults({ ... }).defaults({ ... }).defaults({ ... })...
-   * However, we don't see a clean way in today's TypeSript syntax to do so.
+   * However, we don't see a clean way in today's TypeScript syntax to do so.
    * We instead artificially limit accurate type inference to just three levels,
    * since real users are not likely to go past that.
    * @see https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions/pull/57
@@ -108,4 +108,4 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
 
   constructor(options: TOptions);
 }
-export {};
+export { };
