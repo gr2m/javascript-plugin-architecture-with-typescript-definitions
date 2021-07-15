@@ -31,6 +31,13 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
     ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
     : never;
 
+type ConstructorRequiringVersion<Class, PredefinedOptions> =
+  { defaultOptions: PredefinedOptions } & (
+    PredefinedOptions extends { version: string }
+      ? { new <NowProvided>(options?: NowProvided): Class & { options: NowProvided & PredefinedOptions }; }
+      : { new <NowProvided>(options: Base.Options & NowProvided): Class & { options: NowProvided & PredefinedOptions }; }
+  );
+
 export declare class Base<TOptions extends Base.Options = Base.Options> {
   static plugins: Plugin[];
 
@@ -75,18 +82,24 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    * const base = new MyBase({ option: 'value' }); // `version` option is not required
    * base.options // typed as `{ version: string, otherDefault: string, option: string }`
    * ```
+   * @remarks
+   * Ideally, we would want to make this infinitely recursive: allowing any number of 
+   * .defaults({ ... }).defaults({ ... }).defaults({ ... }).defaults({ ... })...
+   * However, we don't see a clean way in today's TypeSript syntax to do so.
+   * We instead artificially limit accurate type inference to just three levels,
+   * since real users are not likely to go past that.
+   * @see https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions/pull/57
    */
   static defaults<
-    TDefaults extends Base.Options,
-    S extends Constructor<Base<TDefaults>>
-  >(
-    this: S,
-    defaults: Partial<TDefaults>
-  ): {
-    new (...args: any[]): {
-      options: TDefaults;
-    };
-  } & S;
+    PredefinedOptionsOne,
+    Class extends Constructor<Base<Base.Options & PredefinedOptionsOne>>
+  >(this: Class, defaults: PredefinedOptionsOne): ConstructorRequiringVersion<Class, PredefinedOptionsOne> & {
+    defaults<PredefinedOptionsTwo>(this: Class, defaults: PredefinedOptionsTwo): ConstructorRequiringVersion<Class, PredefinedOptionsOne & PredefinedOptionsTwo> & {
+      defaults<PredefinedOptionsThree>(this: Class, defaults: PredefinedOptionsThree): ConstructorRequiringVersion<Class, PredefinedOptionsOne & PredefinedOptionsTwo & PredefinedOptionsThree> & Class;
+    } & Class;
+  } & Class;
+
+  static defaultOptions: {};
 
   /**
    * options passed to the constructor as constructor defaults

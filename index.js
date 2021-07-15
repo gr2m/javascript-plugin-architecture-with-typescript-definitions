@@ -14,13 +14,18 @@ export class Base {
       );
     };
   }
+
   static defaults(defaults) {
     return class extends this {
       constructor(...args) {
         super(Object.assign({}, defaults, args[0] || {}));
       }
+
+      static defaultOptions = defaults;
     };
   }
+
+  static defaultOptions = {};
 
   static plugins = [];
 }
