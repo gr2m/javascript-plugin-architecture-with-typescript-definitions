@@ -57,7 +57,7 @@ expectType<{
   defaultOne: string,
   defaultTwo: number,
   version: string,
-}>(BaseLevelTwo.defaultOptions);
+}>({ ...BaseLevelTwo.defaultOptions });
 
 // Because 'version' is already provided, this needs no argument
 new BaseLevelTwo();
@@ -88,7 +88,7 @@ expectType<{
   defaultTwo: number,
   defaultThree: string[],
   version: string,
-}>(BaseLevelThree.defaultOptions);
+}>({ ...BaseLevelThree.defaultOptions });
 
 // Because 'version' is already provided, this needs no argument
 new BaseLevelThree();
