@@ -176,6 +176,15 @@ expectType<{
   defaultThree: string[];
 }>({ ...baseLevelFour.options });
 
+expectType<{
+  version: string;
+  defaultOne: string;
+  defaultTwo: number;
+  defaultThree: string[];
+  defaultFour: number;
+  // @ts-expect-error - .options from .defaults() is only supported until a depth of 4
+}>({ ...baseLevelFour.options });
+
 const BaseWithChainedDefaultsAndPlugins = Base
   .defaults({
     defaultOne: "value",
