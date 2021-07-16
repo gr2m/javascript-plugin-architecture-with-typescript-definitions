@@ -78,7 +78,7 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
     this: Class,
     ...plugins: Plugins,
   ): Class & {
-    plugins: [Class['plugins'], ...Plugins];
+    plugins: [...Class['plugins'], ...Plugins];
   } & Constructor<UnionToIntersection<ReturnTypeOf<Plugins>>>;
 
   /**
