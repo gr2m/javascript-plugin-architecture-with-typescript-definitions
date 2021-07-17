@@ -19,11 +19,11 @@ const BaseWithEmptyDefaults = Base.defaults({
 
 // 'version' is missing and should still be required
 // @ts-expect-error
-new BaseWithEmptyDefaults()
+new BaseWithEmptyDefaults();
 
 // 'version' is missing and should still be required
 // @ts-expect-error
-new BaseWithEmptyDefaults({})
+new BaseWithEmptyDefaults({});
 
 const BaseLevelOne = Base.plugin(fooPlugin).defaults({
   defaultOne: "value",
@@ -35,8 +35,8 @@ new BaseLevelOne();
 new BaseLevelOne({});
 
 expectType<{
-  defaultOne: string,
-  version: string,
+  defaultOne: string;
+  version: string;
 }>(BaseLevelOne.defaultOptions);
 
 const baseLevelOne = new BaseLevelOne({
@@ -54,9 +54,9 @@ const BaseLevelTwo = BaseLevelOne.defaults({
 });
 
 expectType<{
-  defaultOne: string,
-  defaultTwo: number,
-  version: string,
+  defaultOne: string;
+  defaultTwo: number;
+  version: string;
 }>({ ...BaseLevelTwo.defaultOptions });
 
 // Because 'version' is already provided, this needs no argument
@@ -65,11 +65,11 @@ new BaseLevelTwo({});
 
 // 'version' may be overriden, though it's not necessary
 new BaseLevelTwo({
-  version: 'new version',
+  version: "new version",
 });
 
 const baseLevelTwo = new BaseLevelTwo({
-  optionTwo: true
+  optionTwo: true,
 });
 
 expectType<number>(baseLevelTwo.options.defaultTwo);
@@ -80,14 +80,14 @@ expectType<string>(baseLevelTwo.options.version);
 baseLevelTwo.unknown;
 
 const BaseLevelThree = BaseLevelTwo.defaults({
-  defaultThree: ['a', 'b', 'c'],
+  defaultThree: ["a", "b", "c"],
 });
 
 expectType<{
-  defaultOne: string,
-  defaultTwo: number,
-  defaultThree: string[],
-  version: string,
+  defaultOne: string;
+  defaultTwo: number;
+  defaultThree: string[];
+  version: string;
 }>({ ...BaseLevelThree.defaultOptions });
 
 // Because 'version' is already provided, this needs no argument
@@ -96,13 +96,13 @@ new BaseLevelThree({});
 
 // Previous settings may be overriden, though it's not necessary
 new BaseLevelThree({
-  optionOne: '',
+  optionOne: "",
   optionTwo: false,
-  version: 'new version',
+  version: "new version",
 });
 
 const baseLevelThree = new BaseLevelThree({
-  optionThree: [0, 1, 2]
+  optionThree: [0, 1, 2],
 });
 
 expectType<string>(baseLevelThree.options.defaultOne);
@@ -185,19 +185,19 @@ expectType<{
   // @ts-expect-error - .options from .defaults() is only supported until a depth of 4
 }>({ ...baseLevelFour.options });
 
-const BaseWithChainedDefaultsAndPlugins = Base
-  .defaults({
-    defaultOne: "value",
-  })
+const BaseWithChainedDefaultsAndPlugins = Base.defaults({
+  defaultOne: "value",
+})
   .plugin(fooPlugin)
   .defaults({
     defaultTwo: 0,
   });
 
-const baseWithChainedDefaultsAndPlugins =
-  new BaseWithChainedDefaultsAndPlugins({
+const baseWithChainedDefaultsAndPlugins = new BaseWithChainedDefaultsAndPlugins(
+  {
     version: "1.2.3",
-  });
+  }
+);
 
 expectType<string>(baseWithChainedDefaultsAndPlugins.foo);
 
