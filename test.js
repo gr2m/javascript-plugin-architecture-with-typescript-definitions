@@ -1,10 +1,10 @@
 import { test } from "uvu";
 import * as assert from "uvu/assert";
 
-import { Base } from "../index.js";
-import { fooPlugin } from "../plugins/foo/index.js";
-import { barPlugin } from "../plugins/bar/index.js";
-import { voidPlugin } from "../plugins/void/index.js";
+import { Base } from "./index.js";
+import { fooPlugin } from "./plugins/foo/index.js";
+import { barPlugin } from "./plugins/bar/index.js";
+import { voidPlugin } from "./plugins/void/index.js";
 
 test(".plugin(fooPlugin)", () => {
   const FooTest = Base.plugin(fooPlugin);
@@ -46,12 +46,18 @@ test(".defaults({one: 1}).defaults({two: 2})", () => {
 });
 
 test(".defaults({foo: 'bar', baz: 'daz' })", () => {
-  const BaseWithDefaults = Base.defaults({ foo: "bar" }).defaults({ baz: "daz" });
+  const BaseWithDefaults = Base.defaults({ foo: "bar" }).defaults({
+    baz: "daz",
+  });
   const defaultsTest = new BaseWithDefaults();
   const mergedOptionsTest = new BaseWithDefaults({ faz: "boo" });
   assert.equal(BaseWithDefaults.defaultOptions, { foo: "bar", baz: "daz" });
   assert.equal(defaultsTest.options, { foo: "bar", baz: "daz" });
-  assert.equal(mergedOptionsTest.options, { foo: "bar", baz: "daz", faz: "boo" });
+  assert.equal(mergedOptionsTest.options, {
+    foo: "bar",
+    baz: "daz",
+    faz: "boo",
+  });
 });
 
 test(".plugin().defaults()", () => {
