@@ -44,6 +44,10 @@ const instance = new BaseWithOptions();
 instance.options; // {foo: 'bar'}
 ```
 
+### Defaults
+
+TypeScript will not complain when chaining `.defaults()` calls endlessly: the static `.defaultOptions` property will be set correctly. However, when instantiating from a class with 4+ chained `.defaults()` calls, then only the defaults from the first 3 calls are supported. See [#57](https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions/pull/57) for details.
+
 ## Credit
 
 This plugin architecture was extracted from [`@octokit/core`](https://github.com/octokit/core.js). The implementation was made possible by help from [@karol-majewski](https://github.com/karol-majewski), [@dragomirtitian](https://github.com/dragomirtitian), and [StackOverflow user "hackape"](https://stackoverflow.com/a/58706699/206879).

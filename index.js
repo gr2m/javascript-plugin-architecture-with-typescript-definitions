@@ -14,6 +14,7 @@ export class Base {
       );
     };
   }
+
   static defaults(defaults) {
     return class extends this {
       constructor(options) {
@@ -22,8 +23,12 @@ export class Base {
           ...options,
         });
       }
+
+      static defaultOptions = { ...defaults, ...this.defaultOptions };
     };
   }
+
+  static defaultOptions = {};
 
   static plugins = [];
 }
