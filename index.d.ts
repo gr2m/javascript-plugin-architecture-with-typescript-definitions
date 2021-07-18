@@ -1,8 +1,5 @@
 export declare namespace Base {
-  interface Options {
-    version: string;
-    [key: string]: unknown;
-  }
+  interface Options {}
 }
 
 declare type ApiExtension = {
@@ -32,22 +29,30 @@ declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
     : never;
 
 type ClassWithPlugins = Constructor<any> & {
-  plugins: any[];
+  plugins: Plugin[];
 };
+
+type RemainingRequirements<PredefinedOptions> =
+  keyof PredefinedOptions extends never
+    ? Base.Options
+    : Omit<Base.Options, keyof PredefinedOptions>
+
+type NonOptionalKeys<Obj> = {
+  [K in keyof Obj]: {} extends Pick<Obj, K> ? never : K;
+}[keyof Obj];
+
+type RequiredIfRemaining<PredefinedOptions, NowProvided> = 
+  NonOptionalKeys<RemainingRequirements<PredefinedOptions>> extends never
+    ? [(Partial<Base.Options> & NowProvided)?]
+    : [Partial<Base.Options> & RemainingRequirements<PredefinedOptions> & NowProvided];
 
 type ConstructorRequiringVersion<Class extends ClassWithPlugins, PredefinedOptions> = {
   defaultOptions: PredefinedOptions;
-} & (PredefinedOptions extends { version: string }
-  ? {
-      new <NowProvided>(options?: NowProvided): Class & {
-        options: NowProvided & PredefinedOptions;
-      };
-    }
-  : {
-      new <NowProvided>(options: Base.Options & NowProvided): Class & {
-        options: NowProvided & PredefinedOptions;
-      };
-    });
+} & {
+  new <NowProvided>(...options: RequiredIfRemaining<PredefinedOptions, NowProvided>): Class & {
+    options: NowProvided & PredefinedOptions;
+  };
+};
 
 export declare class Base<TOptions extends Base.Options = Base.Options> {
   static plugins: Plugin[];
