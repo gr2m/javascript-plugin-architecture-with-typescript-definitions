@@ -9,7 +9,7 @@ const base1 = new Base();
 const base2 = new Base({});
 ```
 
-But required options can be added by extending the `Base.Optiions` interface.
+But required options can be added by extending the `Base.Options` interface.
 
 ```ts
 declare module "javascript-plugin-architecture-with-typescript-definitions" {
