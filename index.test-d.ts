@@ -33,7 +33,7 @@ new BaseWithEmptyDefaults();
 // @ts-expect-error
 new BaseWithEmptyDefaults({});
 
-const BaseLevelOne = Base.plugin(fooPlugin).defaults({
+const BaseLevelOne = Base.plugin([fooPlugin]).defaults({
   defaultOne: "value",
   required: "1.2.3",
 });
@@ -121,7 +121,7 @@ expectType<string>(baseLevelThree.options.required);
 // @ts-expect-error unknown properties cannot be used, see #31
 baseLevelThree.unknown;
 
-const BaseWithVoidPlugin = Base.plugin(voidPlugin);
+const BaseWithVoidPlugin = Base.plugin([voidPlugin]);
 const baseWithVoidPlugin = new BaseWithVoidPlugin({
   required: "1.2.3",
 });
@@ -129,7 +129,7 @@ const baseWithVoidPlugin = new BaseWithVoidPlugin({
 // @ts-expect-error unknown properties cannot be used, see #31
 baseWithVoidPlugin.unknown;
 
-const BaseWithFooAndBarPlugins = Base.plugin(barPlugin, fooPlugin);
+const BaseWithFooAndBarPlugins = Base.plugin([barPlugin, fooPlugin]);
 const baseWithFooAndBarPlugins = new BaseWithFooAndBarPlugins({
   required: "1.2.3",
 });
@@ -140,11 +140,11 @@ expectType<string>(baseWithFooAndBarPlugins.bar);
 // @ts-expect-error unknown properties cannot be used, see #31
 baseWithFooAndBarPlugins.unknown;
 
-const BaseWithVoidAndNonVoidPlugins = Base.plugin(
+const BaseWithVoidAndNonVoidPlugins = Base.plugin([
   barPlugin,
   voidPlugin,
-  fooPlugin
-);
+  fooPlugin,
+]);
 const baseWithVoidAndNonVoidPlugins = new BaseWithVoidAndNonVoidPlugins({
   required: "1.2.3",
 });
@@ -155,7 +155,7 @@ expectType<string>(baseWithVoidAndNonVoidPlugins.bar);
 // @ts-expect-error unknown properties cannot be used, see #31
 baseWithVoidAndNonVoidPlugins.unknown;
 
-const BaseWithOptionsPlugin = Base.plugin(withOptionsPlugin);
+const BaseWithOptionsPlugin = Base.plugin([withOptionsPlugin]);
 const baseWithOptionsPlugin = new BaseWithOptionsPlugin({
   required: "1.2.3",
 });
@@ -196,7 +196,7 @@ expectType<{
 const BaseWithChainedDefaultsAndPlugins = Base.defaults({
   defaultOne: "value",
 })
-  .plugin(fooPlugin)
+  .plugin([fooPlugin])
   .defaults({
     defaultTwo: 0,
   });
@@ -212,11 +212,11 @@ expectType<string>(baseWithChainedDefaultsAndPlugins.foo);
 const BaseWithManyChainedDefaultsAndPlugins = Base.defaults({
   defaultOne: "value",
 })
-  .plugin(fooPlugin, barPlugin, voidPlugin)
+  .plugin([fooPlugin, barPlugin, voidPlugin])
   .defaults({
     defaultTwo: 0,
   })
-  .plugin(withOptionsPlugin)
+  .plugin([withOptionsPlugin])
   .defaults({
     defaultThree: ["a", "b", "c"],
   });

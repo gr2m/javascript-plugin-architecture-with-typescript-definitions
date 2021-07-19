@@ -26,11 +26,11 @@ function myBarPlugin(instance: Base) {
   };
 }
 
-const FooTest = Base.plugin(myFooPlugin);
+const FooTest = Base.plugin([myFooPlugin]);
 const fooTest = new FooTest();
 fooTest.foo(); // has full TypeScript intellisense
 
-const FooBarTest = Base.plugin(myFooPlugin, myBarPlugin);
+const FooBarTest = Base.plugin([myFooPlugin, myBarPlugin]);
 const fooBarTest = new FooBarTest();
 fooBarTest.foo(); // has full TypeScript intellisense
 fooBarTest.bar(); // has full TypeScript intellisense

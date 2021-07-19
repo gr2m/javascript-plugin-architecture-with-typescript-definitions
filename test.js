@@ -6,25 +6,25 @@ import { fooPlugin } from "./plugins/foo/index.js";
 import { barPlugin } from "./plugins/bar/index.js";
 import { voidPlugin } from "./plugins/void/index.js";
 
-test(".plugin(fooPlugin)", () => {
-  const FooTest = Base.plugin(fooPlugin);
+test(".plugin([fooPlugin])", () => {
+  const FooTest = Base.plugin([fooPlugin]);
   const fooTest = new FooTest();
   assert.equal(fooTest.foo, "foo");
 });
-test(".plugin(fooPlugin, barPlugin)", () => {
-  const FooBarTest = Base.plugin(fooPlugin, barPlugin);
+test(".plugin([fooPlugin, barPlugin])", () => {
+  const FooBarTest = Base.plugin([fooPlugin, barPlugin]);
   const fooBarTest = new FooBarTest();
   assert.equal(fooBarTest.foo, "foo");
   assert.equal(fooBarTest.bar, "bar");
 });
-test(".plugin(fooPlugin, barPlugin, voidPlugin)", () => {
-  const FooBarTest = Base.plugin(fooPlugin, barPlugin, voidPlugin);
+test(".plugin([fooPlugin, barPlugin, voidPlugin])", () => {
+  const FooBarTest = Base.plugin([fooPlugin, barPlugin, voidPlugin]);
   const fooBarTest = new FooBarTest();
   assert.equal(fooBarTest.foo, "foo");
   assert.equal(fooBarTest.bar, "bar");
 });
-test(".plugin(fooPlugin).plugin(barPlugin)", () => {
-  const FooBarTest = Base.plugin(fooPlugin).plugin(barPlugin);
+test(".plugin([fooPlugin]).plugin(barPlugin)", () => {
+  const FooBarTest = Base.plugin([fooPlugin]).plugin([barPlugin]);
   const fooBarTest = new FooBarTest();
   assert.equal(fooBarTest.foo, "foo");
   assert.equal(fooBarTest.bar, "bar");
@@ -61,12 +61,12 @@ test(".defaults({foo: 'bar', baz: 'daz' })", () => {
 });
 
 test(".plugin().defaults()", () => {
-  const BaseWithPluginAndDefaults = Base.plugin(fooPlugin).defaults({
+  const BaseWithPluginAndDefaults = Base.plugin([fooPlugin]).defaults({
     baz: "daz",
   });
   const BaseWithDefaultsAndPlugin = Base.defaults({
     baz: "daz",
-  }).plugin(fooPlugin);
+  }).plugin([fooPlugin]);
 
   const instance1 = new BaseWithPluginAndDefaults();
   const instance2 = new BaseWithDefaultsAndPlugin();

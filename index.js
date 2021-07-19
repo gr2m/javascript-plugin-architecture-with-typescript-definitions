@@ -6,7 +6,7 @@ export class Base {
     });
   }
 
-  static plugin(...newPlugins) {
+  static plugin(newPlugins) {
     const currentPlugins = this.plugins;
     return class extends this {
       static plugins = currentPlugins.concat(
