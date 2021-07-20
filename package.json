@@ -16,7 +16,7 @@
     "test": "npm run -s test:code && npm run -s test:typescript && npm run -s test:coverage && npm run -s lint",
     "test:code": "c8 uvu . '^(examples/.*/)?test.js$'",
     "test:coverage": "c8 check-coverage",
-    "test:typescript": "tsd && tsd examples/*"
+    "test:typescript": "tsd && for d in examples/* ; do tsd $d; done"
   },
   "repository": "github:gr2m/javascript-plugin-architecture-with-typescript-definitions",
   "keywords": [
