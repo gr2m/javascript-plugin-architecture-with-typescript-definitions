@@ -5,7 +5,7 @@ import { Base } from "../../index.js";
  * @param {Base.Options} options
  */
 function pluginRequiringOption(base, options) {
-  if (!options.myRequiredUserOption) {
+  if (typeof options.myRequiredUserOption !== "string") {
     throw new Error('Required option "myRequiredUserOption" missing');
   }
 }
