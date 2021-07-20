@@ -5,38 +5,93 @@
 [![@latest](https://img.shields.io/npm/v/javascript-plugin-architecture-with-typescript-definitions.svg)](https://www.npmjs.com/package/javascript-plugin-architecture-with-typescript-definitions)
 [![Build Status](https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions/workflows/Test/badge.svg)](https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions/actions/workflows/test.yml)
 
-The goal of this repository is to provide a template of a simple plugin Architecture which allows plugins to be created and authored as separate npm modules and shared as official or 3rd party plugins. It also permits the plugins to extend the types for the constructor options.
+The goal of this repository is to provide a template for a simple plugin Architecture which allows plugin authors to extend the base API as well as extend its constructor options. A custom class can be composed of the core Base class, a set of plugins and default options and distributed as new package, with full TypeScript for added APIs and constructor options.
 
 ## Usage
 
-[Try it in TypeScript's playground editor](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgIQIYGcCmcC+cBmUEIcARAFaoBuGAxlMGDALRgA2ArgObAB2zqKLQAWwGJlowOUTMwDuY4cxgBPMJnT1GLACaZ8fMcAi90pANwAoS-g69Jx3nBAqAYhAgAFTj14AKPnQYVHtMAC4UDEwASkRLODgZKSgnBHiEgg8Iv1iAXgA+MnwPUgAadJwrHGtbexhHZxU0KG9uPgDTYNCItCxYtISk6VT0hIAjQWy8wtIJqDKKqpq7BxM4DCxYAGUYBl4uP3QOMfIJGAigva5+6staEyC4dwgAFQ14XMisADoFGGFWr50H4ANouZ6AvgAXWiVnunUyr3ecE+vEwcieHjeQRyVg2mG2uz4B2KSKC31JOVh1nhj2ezWxHy+mF+ikhplB4I87NKjWa7JhcIe8FJDORqPRmIgYpx1PxhKuflFgkZFI8VLx6E2MB2iuVUFVcw1QA)
+[Try it in TypeScript's playground editor](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAbzgIQIYGcCmcC+cBmUEIcARAFaoBuGAxlMGDALRgA2ArgObAB2zqKLQAWwGJlowOUTMwDuY4cxgBPMJnT1GLACaZ8fMcAi90pANwAoS3tptB2EBB0c22CtToMmrTj36CImISUjLyispqGlo+ega8RiZmiJZwcLyoIBpgqLTYaFgpaWl84lD4udgA8kzGpkXFafgQEABccOgwDLxcVo04qbiWA5b4HLySdXAgKgBiLQAKfnwAFHydqBOY7QWYADRwELVJOxiYAHQ1MHXoAJQNMqG8DU0t7Sv3ALwAfIfHpudmhA4AAfEFkABGglIe0GOCsIzGE2uJmmKjQUCW3FW6xgmzypyw9wQg0e0meJMaUKg7y+v1I1JhcIR1loSXgAFl0Wc4J8UGdzgoYMIsf50CsANozeYQUV8A4zDFy3gAXVugsUABF9KhXDBxZSCG9IdDYThblZLGzTPBFTy+bxMHI4FzdiskED2gzUAAvUi4C2WO1YQEtD7mOAAekjHS6fC4Qe5Iep4ajMc63QTQA)
+
+### Export new class `MyBase` with two plugins and default options:
 
 ```ts
+// import the Base class
 import { Base } from "javascript-plugin-architecture-with-typescript-definitions";
 
-function myFooPlugin(instance: Base) {
-  return {
-    foo: () => "foo",
-  };
-}
+// import a set of plugins
+import { myFooPlugin } from "@example/my-foo-plugin";
+import { myBarPlugin } from "./my-bar-plugin";
 
-function myBarPlugin(instance: Base) {
-  return {
-    bar: () => "bar",
-  };
-}
-
-const FooTest = Base.withPlugins([myFooPlugin]);
-const fooTest = new FooTest();
-fooTest.foo(); // has full TypeScript intellisense
-
-const FooBarTest = Base.withPlugins([myFooPlugin, myBarPlugin]);
-const fooBarTest = new FooBarTest();
-fooBarTest.foo(); // has full TypeScript intellisense
-fooBarTest.bar(); // has full TypeScript intellisense
+export const MyBase = Base.withPlugins([myFooPlugin, myBarPlugin]).withDefaults(
+  {
+    foo: "bar",
+  }
+);
 ```
 
-The constructor accepts an optional `options` object which is passed to the plugins as second argument and stored in `instance.options`. Default options can be set using `Base.withDefaults(options)`.
+When importing `MyBase` and instantiating it, the `MyBase` constructor has type support for the new optional `foo` option as well as the `.foo()` and `.bar()` methods addded by the respective plugins.
+
+```ts
+import { MyBase } from "@example/my-base";
+
+const myBase = new MyBase({
+  // has full TypeScript intellisense
+  foo: "bar",
+});
+myBase.foo(); // has full TypeScript intellisense
+myBase.bar(); // has full TypeScript intellisense
+```
+
+### Create plugin which extends the API as well as the constructor options type
+
+```js
+import { Base } from "javascript-plugin-architecture-with-typescript-definitions";
+
+declare module "javascript-plugin-architecture-with-typescript-definitions" {
+  namespace Base {
+    interface Options {
+      foo?: string;
+    }
+  }
+}
+
+export function myFooPlugin(base: Base, options: Base.options) {
+  return {
+    foo() => options.foo || "bar",
+  }
+}
+```
+
+## API
+
+### static `.withPlugins(plugins)`
+
+Returns a new class with `.plugins` added to parent classes `.plugins` array. All plugins will be applied to instances.
+
+### static `.withDefaults(options)`
+
+Returns a new class with `.defaults` merged with the parent classes `.defaults` object. The defaults are applied to the options passed to the constructor when instantiated.
+
+### static `.plugins`
+
+`Base.plugins` is an empty array by default. It is extended on derived classes using `.withPlugins(plugins)`.
+
+### static `.defaults`
+
+`Base.defaults` is an empty object by default. It is extended on derived classes using `.withDefaults(plugins)`.
+
+### Constructor
+
+The constructor accepts one argument which is optional by default
+
+```ts
+new Base(options);
+```
+
+If the `Base.Options` interface has been extended with required keys, then the `options` argument becomes required, and all required `Base.Options` keys must be set.
+
+### `.options`
+
+The `.options` key is set on all instances. It's merged from from the constructor's `.defaults` object and the options passed to the constructor
 
 ```js
 const BaseWithOptions = Base.withDefaults({ foo: "bar" });
@@ -46,27 +101,25 @@ instance.options; // {foo: 'bar'}
 
 Note that in for TypeScript to recognize the new option, you have to extend the `Base.Option` intererface.
 
+### Other instance propreties and methods
+
+Instance properties and methods can be added using plugins. Example:
+
 ```ts
-declare module "javascript-plugin-architecture-with-typescript-definitions" {
-  namespace Base {
-    interface Options {
-      foo: string;
-    }
-  }
+function myPlugin(base: Base, options: Base.options) {
+  return {
+    myMethod() {
+      /* do something here */
+    },
+    myProperty: "", // set to something useful
+  };
 }
-```
+const MyBase = Base.plugins([myPlugin]);
+const myBase = new MyBase();
 
-See also the [`required-options` example](examples/required-options).
-
-The `Base` class also has two static properties
-
-- `.defaults`: the default options for all instances
-- `.plugins`: the list of plugins applied to all instances
-
-When creating a new class with `.withPlugins()` and `.defaults()`, the static properties of the returned class are set accordingly.
-
-```js
-const MyBase = Base.withDefaults({ foo: "bar" });
+// this method and property is now set
+myBase.myMethod();
+myBase.myProperty;
 ```
 
 ### Defaults
