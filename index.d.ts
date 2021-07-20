@@ -50,7 +50,6 @@ type ConstructorRequiringVersion<Class extends ClassWithPlugins, PredefinedOptio
   defaultOptions: PredefinedOptions;
 } & {
   new <NowProvided>(...options: RequiredIfRemaining<PredefinedOptions, NowProvided>): Class & {
-    debugKeys: NonOptionalKeys<RemainingRequirements<PredefinedOptions>>;
     options: NowProvided & PredefinedOptions;
   };
 };
