@@ -51,11 +51,11 @@ type RequiredIfRemaining<PredefinedOptions, NowProvided> = NonOptionalKeys<
         NowProvided
     ];
 
-type ConstructorRequiringVersion<
+type ConstructorRequiringOptionsIfNeeded<
   Class extends ClassWithPlugins,
   PredefinedOptions
 > = {
-  defaultOptions: PredefinedOptions;
+  defaults: PredefinedOptions;
 } & {
   new <NowProvided>(
     ...options: RequiredIfRemaining<PredefinedOptions, NowProvided>
@@ -65,8 +65,6 @@ type ConstructorRequiringVersion<
 };
 
 export declare class Base<TOptions extends Base.Options = Base.Options> {
-  static plugins: Plugin[];
-
   /**
    * Pass one or multiple plugin functions to extend the `Base` class.
    * The instance of the new class will be extended with any keys returned by the passed plugins.
@@ -81,12 +79,12 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    *   };
    * }
    *
-   * const MyBase = Base.plugin(helloWorld);
+   * const MyBase = Base.withPlugins([helloWorld]);
    * const base = new MyBase();
    * base.helloWorld(); // `base.helloWorld` is typed as function
    * ```
    */
-  static plugin<
+  static withPlugins<
     Class extends ClassWithPlugins,
     Plugins extends [Plugin, ...Plugin[]]
   >(
@@ -100,37 +98,37 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    * Set defaults for the constructor
    *
    * ```js
-   * const MyBase = Base.defaults({ version: '1.0.0', otherDefault: 'value' });
+   * const MyBase = Base.withDefaults({ version: '1.0.0', otherDefault: 'value' });
    * const base = new MyBase({ option: 'value' }); // `version` option is not required
    * base.options // typed as `{ version: string, otherDefault: string, option: string }`
    * ```
    * @remarks
    * Ideally, we would want to make this infinitely recursive: allowing any number of
-   * .defaults({ ... }).defaults({ ... }).defaults({ ... }).defaults({ ... })...
+   * .withDefaults({ ... }).withDefaults({ ... }).withDefaults({ ... }).withDefaults({ ... })...
    * However, we don't see a clean way in today's TypeScript syntax to do so.
    * We instead artificially limit accurate type inference to just three levels,
    * since real users are not likely to go past that.
    * @see https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions/pull/57
    */
-  static defaults<
+  static withDefaults<
     PredefinedOptionsOne,
     ClassOne extends Constructor<Base<Base.Options & PredefinedOptionsOne>> &
       ClassWithPlugins
   >(
     this: ClassOne,
     defaults: PredefinedOptionsOne
-  ): ConstructorRequiringVersion<ClassOne, PredefinedOptionsOne> & {
-    defaults<ClassTwo, PredefinedOptionsTwo>(
+  ): ConstructorRequiringOptionsIfNeeded<ClassOne, PredefinedOptionsOne> & {
+    withDefaults<ClassTwo, PredefinedOptionsTwo>(
       this: ClassTwo,
       defaults: PredefinedOptionsTwo
-    ): ConstructorRequiringVersion<
+    ): ConstructorRequiringOptionsIfNeeded<
       ClassOne & ClassTwo,
       PredefinedOptionsOne & PredefinedOptionsTwo
     > & {
-      defaults<ClassThree, PredefinedOptionsThree>(
+      withDefaults<ClassThree, PredefinedOptionsThree>(
         this: ClassThree,
         defaults: PredefinedOptionsThree
-      ): ConstructorRequiringVersion<
+      ): ConstructorRequiringOptionsIfNeeded<
         ClassOne & ClassTwo & ClassThree,
         PredefinedOptionsOne & PredefinedOptionsTwo & PredefinedOptionsThree
       > &
@@ -141,7 +139,15 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
       ClassTwo;
   } & ClassOne;
 
-  static defaultOptions: {};
+  /**
+   * list of plugins that will be applied to all instances
+   */
+  static plugins: Plugin[];
+
+  /**
+   * list of default options that will be applied to all instances
+   */
+  static defaults: {};
 
   /**
    * options passed to the constructor as constructor defaults

@@ -6,7 +6,7 @@ export class Base {
     });
   }
 
-  static plugin(newPlugins) {
+  static withPlugins(newPlugins) {
     const currentPlugins = this.plugins;
     return class extends this {
       static plugins = currentPlugins.concat(
@@ -15,7 +15,7 @@ export class Base {
     };
   }
 
-  static defaults(defaults) {
+  static withDefaults(defaults) {
     return class extends this {
       constructor(options) {
         super({
@@ -24,11 +24,10 @@ export class Base {
         });
       }
 
-      static defaultOptions = { ...defaults, ...this.defaultOptions };
+      static defaults = { ...defaults, ...this.defaults };
     };
   }
 
-  static defaultOptions = {};
-
   static plugins = [];
+  static defaults = {};
 }
