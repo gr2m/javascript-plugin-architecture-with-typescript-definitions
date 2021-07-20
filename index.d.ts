@@ -1,5 +1,5 @@
 export declare namespace Base {
-  interface Options { }
+  interface Options {}
 }
 
 declare type ApiExtension = {
@@ -23,10 +23,10 @@ declare type UnionToIntersection<Union> = (
 declare type AnyFunction = (...args: any) => any;
 declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
   T extends AnyFunction
-  ? ReturnType<T>
-  : T extends AnyFunction[]
-  ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
-  : never;
+    ? ReturnType<T>
+    : T extends AnyFunction[]
+    ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
+    : never;
 
 type ClassWithPlugins = Constructor<any> & {
   plugins: Plugin[];
@@ -34,22 +34,32 @@ type ClassWithPlugins = Constructor<any> & {
 
 type RemainingRequirements<PredefinedOptions> =
   keyof PredefinedOptions extends never
-  ? Base.Options
-  : Omit<Base.Options, keyof PredefinedOptions>
+    ? Base.Options
+    : Omit<Base.Options, keyof PredefinedOptions>;
 
 type NonOptionalKeys<Obj> = {
   [K in keyof Obj]: {} extends Pick<Obj, K> ? undefined : K;
 }[keyof Obj];
 
-type RequiredIfRemaining<PredefinedOptions, NowProvided> =
-  NonOptionalKeys<RemainingRequirements<PredefinedOptions>> extends undefined
+type RequiredIfRemaining<PredefinedOptions, NowProvided> = NonOptionalKeys<
+  RemainingRequirements<PredefinedOptions>
+> extends undefined
   ? [(Partial<Base.Options> & NowProvided)?]
-  : [Partial<Base.Options> & RemainingRequirements<PredefinedOptions> & NowProvided];
+  : [
+      Partial<Base.Options> &
+        RemainingRequirements<PredefinedOptions> &
+        NowProvided
+    ];
 
-type ConstructorRequiringVersion<Class extends ClassWithPlugins, PredefinedOptions> = {
+type ConstructorRequiringVersion<
+  Class extends ClassWithPlugins,
+  PredefinedOptions
+> = {
   defaultOptions: PredefinedOptions;
 } & {
-  new <NowProvided>(...options: RequiredIfRemaining<PredefinedOptions, NowProvided>): Class & {
+  new <NowProvided>(
+    ...options: RequiredIfRemaining<PredefinedOptions, NowProvided>
+  ): Class & {
     options: NowProvided & PredefinedOptions;
   };
 };
@@ -78,12 +88,12 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    */
   static plugin<
     Class extends ClassWithPlugins,
-    Plugins extends [Plugin, ...Plugin[]],
-    >(
-      this: Class,
-      ...plugins: Plugins,
+    Plugins extends [Plugin, ...Plugin[]]
+  >(
+    this: Class,
+    ...plugins: Plugins
   ): Class & {
-    plugins: [...Class['plugins'], ...Plugins];
+    plugins: [...Class["plugins"], ...Plugins];
   } & Constructor<UnionToIntersection<ReturnTypeOf<Plugins>>>;
 
   /**
@@ -104,7 +114,8 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    */
   static defaults<
     PredefinedOptionsOne,
-    ClassOne extends Constructor<Base<Base.Options & PredefinedOptionsOne>> & ClassWithPlugins
+    ClassOne extends Constructor<Base<Base.Options & PredefinedOptionsOne>> &
+      ClassWithPlugins
   >(
     this: ClassOne,
     defaults: PredefinedOptionsOne
@@ -122,8 +133,12 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
       ): ConstructorRequiringVersion<
         ClassOne & ClassTwo & ClassThree,
         PredefinedOptionsOne & PredefinedOptionsTwo & PredefinedOptionsThree
-      > & ClassOne & ClassTwo & ClassThree;
-    } & ClassOne & ClassTwo;
+      > &
+        ClassOne &
+        ClassTwo &
+        ClassThree;
+    } & ClassOne &
+      ClassTwo;
   } & ClassOne;
 
   static defaultOptions: {};
@@ -135,4 +150,4 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
 
   constructor(options: TOptions);
 }
-export { };
+export {};
