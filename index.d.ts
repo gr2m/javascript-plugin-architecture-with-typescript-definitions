@@ -5,7 +5,7 @@ export declare namespace Base {
 declare type ApiExtension = {
   [key: string]: unknown;
 };
-declare type Plugin = (
+export declare type Plugin = (
   instance: Base,
   options: Base.Options
 ) => ApiExtension | void;
