@@ -1,5 +1,5 @@
 import { expectType } from "tsd";
-import { Base } from "./index.js";
+import { Base, Plugin } from "./index.js";
 
 import { fooPlugin } from "./plugins/foo/index.js";
 import { barPlugin } from "./plugins/bar/index.js";
@@ -32,6 +32,8 @@ new BaseWithEmptyDefaults();
 // 'required' is missing and should still be required
 // @ts-expect-error
 new BaseWithEmptyDefaults({});
+
+expectType<Plugin[]>(Base.plugins);
 
 const BaseLevelOne = Base.withPlugins([fooPlugin]).withDefaults({
   defaultOne: "value",
