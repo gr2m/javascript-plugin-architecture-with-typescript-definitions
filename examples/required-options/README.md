@@ -21,7 +21,7 @@ declare module "javascript-plugin-architecture-with-typescript-definitions" {
 }
 ```
 
-With that extension, the same code will have type a type error
+With that extension, the same code will have a type error
 
 ```ts
 // TS Error: Property 'myRequiredUserOption' is missing in type '{}' but required in type 'Options'
