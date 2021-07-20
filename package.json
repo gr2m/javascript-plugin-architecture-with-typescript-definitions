@@ -11,6 +11,7 @@
   },
   "types": "./index.d.ts",
   "scripts": {
+    "lint": "prettier --write '*.{md,json,js,ts}' 'examples/**' 'plugins/**'",
     "test": "npm run -s test:code && npm run -s test:typescript && npm run -s test:coverage",
     "test:code": "c8 uvu . '^(examples/.*/)?test.js$'",
     "test:coverage": "c8 check-coverage",
@@ -32,6 +33,7 @@
   "license": "ISC",
   "devDependencies": {
     "c8": "^7.7.2",
+    "prettier": "^2.3.2",
     "tsd": "^0.17.0",
     "uvu": "^0.5.1"
   },
