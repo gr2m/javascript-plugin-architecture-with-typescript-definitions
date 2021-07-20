@@ -11,8 +11,9 @@
   },
   "types": "./index.d.ts",
   "scripts": {
-    "lint": "prettier --write '*.{md,json,js,ts}' 'examples/**' 'plugins/**'",
-    "test": "npm run -s test:code && npm run -s test:typescript && npm run -s test:coverage",
+    "lint": "prettier --check '*.{md,json,js,ts}' 'examples/**' 'plugins/**'",
+    "lint:fix": "prettier --write '*.{md,json,js,ts}' 'examples/**' 'plugins/**'",
+    "test": "npm run -s test:code && npm run -s test:typescript && npm run -s test:coverage && npm run -s lint",
     "test:code": "c8 uvu . '^(examples/.*/)?test.js$'",
     "test:coverage": "c8 check-coverage",
     "test:typescript": "tsd && tsd examples/*"
