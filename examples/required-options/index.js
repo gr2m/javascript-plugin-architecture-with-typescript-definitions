@@ -10,4 +10,4 @@ function pluginRequiringOption(base, options) {
   }
 }
 
-export const MyBase = Base.plugin(pluginRequiringOption);
+export const MyBase = Base.withPlugins([pluginRequiringOption]);

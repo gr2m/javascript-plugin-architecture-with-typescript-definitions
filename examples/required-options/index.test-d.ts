@@ -10,7 +10,7 @@ new MyBase({
   myRequiredUserOption: "",
 });
 
-const MyBaseWithDefaults = MyBase.defaults({
+const MyBaseWithDefaults = MyBase.withDefaults({
   myRequiredUserOption: "",
 });
 
