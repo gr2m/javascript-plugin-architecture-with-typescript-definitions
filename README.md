@@ -133,7 +133,3 @@ This plugin architecture was extracted from [`@octokit/core`](https://github.com
 ## LICENSE
 
 [ISC](LICENSE)
-
-```
-
-```
