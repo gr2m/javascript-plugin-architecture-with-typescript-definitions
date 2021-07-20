@@ -6,37 +6,45 @@ import { barPlugin } from "./plugins/bar/index.js";
 import { voidPlugin } from "./plugins/void/index.js";
 import { withOptionsPlugin } from "./plugins/with-options";
 
-const base = new Base({
-  version: "1.2.3",
+declare module "./index.js" {
+  namespace Base {
+    interface Options {
+      required: string;
+    }
+  }
+}
+
+const baseSatisfied = new Base({
+  required: "1.2.3",
 });
 
 // @ts-expect-error unknown properties cannot be used, see #31
-base.unknown;
+baseSatisfied.unknown;
 
 const BaseWithEmptyDefaults = Base.defaults({
   // there should be no required options
 });
 
-// 'version' is missing and should still be required
+// 'required' is missing and should still be required
 // @ts-expect-error
-new BaseWithEmptyDefaults()
+new BaseWithEmptyDefaults();
 
-// 'version' is missing and should still be required
+// 'required' is missing and should still be required
 // @ts-expect-error
-new BaseWithEmptyDefaults({})
+new BaseWithEmptyDefaults({});
 
 const BaseLevelOne = Base.plugin(fooPlugin).defaults({
   defaultOne: "value",
-  version: "1.2.3",
+  required: "1.2.3",
 });
 
-// Because 'version' is already provided, this needs no argument
+// Because 'required' is already provided, this needs no argument
 new BaseLevelOne();
 new BaseLevelOne({});
 
 expectType<{
-  defaultOne: string,
-  version: string,
+  defaultOne: string;
+  required: string;
 }>(BaseLevelOne.defaultOptions);
 
 const baseLevelOne = new BaseLevelOne({
@@ -45,7 +53,7 @@ const baseLevelOne = new BaseLevelOne({
 
 expectType<string>(baseLevelOne.options.defaultOne);
 expectType<string>(baseLevelOne.options.optionOne);
-expectType<string>(baseLevelOne.options.version);
+expectType<string>(baseLevelOne.options.required);
 // @ts-expect-error unknown properties cannot be used, see #31
 baseLevelOne.unknown;
 
@@ -54,68 +62,68 @@ const BaseLevelTwo = BaseLevelOne.defaults({
 });
 
 expectType<{
-  defaultOne: string,
-  defaultTwo: number,
-  version: string,
+  defaultOne: string;
+  defaultTwo: number;
+  required: string;
 }>({ ...BaseLevelTwo.defaultOptions });
 
-// Because 'version' is already provided, this needs no argument
+// Because 'required' is already provided, this needs no argument
 new BaseLevelTwo();
 new BaseLevelTwo({});
 
-// 'version' may be overriden, though it's not necessary
+// 'required' may be overriden, though it's not necessary
 new BaseLevelTwo({
-  version: 'new version',
+  required: "new required",
 });
 
 const baseLevelTwo = new BaseLevelTwo({
-  optionTwo: true
+  optionTwo: true,
 });
 
 expectType<number>(baseLevelTwo.options.defaultTwo);
 expectType<string>(baseLevelTwo.options.defaultOne);
 expectType<boolean>(baseLevelTwo.options.optionTwo);
-expectType<string>(baseLevelTwo.options.version);
+expectType<string>(baseLevelTwo.options.required);
 // @ts-expect-error unknown properties cannot be used, see #31
 baseLevelTwo.unknown;
 
 const BaseLevelThree = BaseLevelTwo.defaults({
-  defaultThree: ['a', 'b', 'c'],
+  defaultThree: ["a", "b", "c"],
 });
 
 expectType<{
-  defaultOne: string,
-  defaultTwo: number,
-  defaultThree: string[],
-  version: string,
+  defaultOne: string;
+  defaultTwo: number;
+  defaultThree: string[];
+  required: string;
 }>({ ...BaseLevelThree.defaultOptions });
 
-// Because 'version' is already provided, this needs no argument
+// Because 'required' is already provided, this needs no argument
 new BaseLevelThree();
 new BaseLevelThree({});
 
 // Previous settings may be overriden, though it's not necessary
 new BaseLevelThree({
-  optionOne: '',
+  optionOne: "",
   optionTwo: false,
-  version: 'new version',
+  required: "new required",
 });
 
 const baseLevelThree = new BaseLevelThree({
-  optionThree: [0, 1, 2]
+  optionThree: [0, 1, 2],
 });
 
 expectType<string>(baseLevelThree.options.defaultOne);
 expectType<number>(baseLevelThree.options.defaultTwo);
 expectType<string[]>(baseLevelThree.options.defaultThree);
 expectType<number[]>(baseLevelThree.options.optionThree);
-expectType<string>(baseLevelThree.options.version);
+expectType<string>(baseLevelThree.options.required);
 // @ts-expect-error unknown properties cannot be used, see #31
 baseLevelThree.unknown;
 
 const BaseWithVoidPlugin = Base.plugin(voidPlugin);
 const baseWithVoidPlugin = new BaseWithVoidPlugin({
-  version: "1.2.3",
+  required: "1.2.3",
 });
 
 // @ts-expect-error unknown properties cannot be used, see #31
@@ -123,7 +131,7 @@ baseWithVoidPlugin.unknown;
 
 const BaseWithFooAndBarPlugins = Base.plugin(barPlugin, fooPlugin);
 const baseWithFooAndBarPlugins = new BaseWithFooAndBarPlugins({
-  version: "1.2.3",
+  required: "1.2.3",
 });
 
 expectType<string>(baseWithFooAndBarPlugins.foo);
@@ -138,7 +146,7 @@ const BaseWithVoidAndNonVoidPlugins = Base.plugin(
   fooPlugin
 );
 const baseWithVoidAndNonVoidPlugins = new BaseWithVoidAndNonVoidPlugins({
-  version: "1.2.3",
+  required: "1.2.3",
 });
 
 expectType<string>(baseWithVoidAndNonVoidPlugins.foo);
@@ -149,7 +157,7 @@ baseWithVoidAndNonVoidPlugins.unknown;
 
 const BaseWithOptionsPlugin = Base.plugin(withOptionsPlugin);
 const baseWithOptionsPlugin = new BaseWithOptionsPlugin({
-  version: "1.2.3",
+  required: "1.2.3",
 });
 
 expectType<string>(baseWithOptionsPlugin.getFooOption());
@@ -158,7 +166,7 @@ expectType<string>(baseWithOptionsPlugin.getFooOption());
 const BaseLevelFour = BaseLevelThree.defaults({ defaultFour: 4 });
 
 expectType<{
-  version: string;
+  required: string;
   defaultOne: string;
   defaultTwo: number;
   defaultThree: string[];
@@ -170,14 +178,14 @@ const baseLevelFour = new BaseLevelFour();
 // See the node on static defaults in index.d.ts for why defaultFour is missing
 // .options from .defaults() is only supported until a depth of 4
 expectType<{
-  version: string;
+  required: string;
   defaultOne: string;
   defaultTwo: number;
   defaultThree: string[];
 }>({ ...baseLevelFour.options });
 
 expectType<{
-  version: string;
+  required: string;
   defaultOne: string;
   defaultTwo: number;
   defaultThree: string[];
@@ -185,19 +193,19 @@ expectType<{
   // @ts-expect-error - .options from .defaults() is only supported until a depth of 4
 }>({ ...baseLevelFour.options });
 
-const BaseWithChainedDefaultsAndPlugins = Base
-  .defaults({
-    defaultOne: "value",
-  })
+const BaseWithChainedDefaultsAndPlugins = Base.defaults({
+  defaultOne: "value",
+})
   .plugin(fooPlugin)
   .defaults({
     defaultTwo: 0,
   });
 
-const baseWithChainedDefaultsAndPlugins =
-  new BaseWithChainedDefaultsAndPlugins({
-    version: "1.2.3",
-  });
+const baseWithChainedDefaultsAndPlugins = new BaseWithChainedDefaultsAndPlugins(
+  {
+    required: "1.2.3",
+  }
+);
 
 expectType<string>(baseWithChainedDefaultsAndPlugins.foo);
 
@@ -221,7 +229,7 @@ expectType<{
 
 const baseWithManyChainedDefaultsAndPlugins =
   new BaseWithManyChainedDefaultsAndPlugins({
-    version: "1.2.3",
+    required: "1.2.3",
     foo: "bar",
   });
 
