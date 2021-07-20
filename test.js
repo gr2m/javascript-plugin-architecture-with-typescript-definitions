@@ -6,52 +6,54 @@ import { fooPlugin } from "./plugins/foo/index.js";
 import { barPlugin } from "./plugins/bar/index.js";
 import { voidPlugin } from "./plugins/void/index.js";
 
-test(".plugin([fooPlugin])", () => {
-  const FooTest = Base.plugin([fooPlugin]);
+test(".withPlugins([fooPlugin])", () => {
+  const FooTest = Base.withPlugins([fooPlugin]);
   const fooTest = new FooTest();
   assert.equal(fooTest.foo, "foo");
 });
-test(".plugin([fooPlugin, barPlugin])", () => {
-  const FooBarTest = Base.plugin([fooPlugin, barPlugin]);
+test(".withPlugins([fooPlugin, barPlugin])", () => {
+  const FooBarTest = Base.withPlugins([fooPlugin, barPlugin]);
   const fooBarTest = new FooBarTest();
   assert.equal(fooBarTest.foo, "foo");
   assert.equal(fooBarTest.bar, "bar");
 });
-test(".plugin([fooPlugin, barPlugin, voidPlugin])", () => {
-  const FooBarTest = Base.plugin([fooPlugin, barPlugin, voidPlugin]);
+test(".withPlugins([fooPlugin, barPlugin, voidPlugin])", () => {
+  const FooBarTest = Base.withPlugins([fooPlugin, barPlugin, voidPlugin]);
   const fooBarTest = new FooBarTest();
   assert.equal(fooBarTest.foo, "foo");
   assert.equal(fooBarTest.bar, "bar");
 });
-test(".plugin([fooPlugin]).plugin(barPlugin)", () => {
-  const FooBarTest = Base.plugin([fooPlugin]).plugin([barPlugin]);
+test(".withPlugins([fooPlugin]).withPlugins(barPlugin)", () => {
+  const FooBarTest = Base.withPlugins([fooPlugin]).withPlugins([barPlugin]);
   const fooBarTest = new FooBarTest();
   assert.equal(fooBarTest.foo, "foo");
   assert.equal(fooBarTest.bar, "bar");
 });
-test(".defaults({foo: 'bar'})", () => {
-  const BaseWithDefaults = Base.defaults({ foo: "bar" });
+test(".withDefaults({foo: 'bar'})", () => {
+  const BaseWithDefaults = Base.withDefaults({ foo: "bar" });
   const defaultsTest = new BaseWithDefaults();
   const mergedOptionsTest = new BaseWithDefaults({ baz: "daz" });
-  assert.equal(BaseWithDefaults.defaultOptions, { foo: "bar" });
+  assert.equal(BaseWithDefaults.defaults, { foo: "bar" });
   assert.equal(defaultsTest.options, { foo: "bar" });
   assert.equal(mergedOptionsTest.options, { foo: "bar", baz: "daz" });
 });
-test(".defaults({one: 1}).defaults({two: 2})", () => {
-  const BaseWithDefaults = Base.defaults({ one: 1 }).defaults({ two: 2 });
+test(".withDefaults({one: 1}).withDefaults({two: 2})", () => {
+  const BaseWithDefaults = Base.withDefaults({ one: 1 }).withDefaults({
+    two: 2,
+  });
   const defaultsTest = new BaseWithDefaults();
   const mergedOptionsTest = new BaseWithDefaults({ three: 3 });
   assert.equal(defaultsTest.options, { one: 1, two: 2 });
   assert.equal(mergedOptionsTest.options, { one: 1, two: 2, three: 3 });
 });
 
-test(".defaults({foo: 'bar', baz: 'daz' })", () => {
-  const BaseWithDefaults = Base.defaults({ foo: "bar" }).defaults({
+test(".withDefaults({foo: 'bar', baz: 'daz' })", () => {
+  const BaseWithDefaults = Base.withDefaults({ foo: "bar" }).withDefaults({
     baz: "daz",
   });
   const defaultsTest = new BaseWithDefaults();
   const mergedOptionsTest = new BaseWithDefaults({ faz: "boo" });
-  assert.equal(BaseWithDefaults.defaultOptions, { foo: "bar", baz: "daz" });
+  assert.equal(BaseWithDefaults.defaults, { foo: "bar", baz: "daz" });
   assert.equal(defaultsTest.options, { foo: "bar", baz: "daz" });
   assert.equal(mergedOptionsTest.options, {
     foo: "bar",
@@ -60,13 +62,13 @@ test(".defaults({foo: 'bar', baz: 'daz' })", () => {
   });
 });
 
-test(".plugin().defaults()", () => {
-  const BaseWithPluginAndDefaults = Base.plugin([fooPlugin]).defaults({
+test(".withPlugins().withDefaults()", () => {
+  const BaseWithPluginAndDefaults = Base.withPlugins([fooPlugin]).withDefaults({
     baz: "daz",
   });
-  const BaseWithDefaultsAndPlugin = Base.defaults({
+  const BaseWithDefaultsAndPlugin = Base.withDefaults({
     baz: "daz",
-  }).plugin([fooPlugin]);
+  }).withPlugins([fooPlugin]);
 
   const instance1 = new BaseWithPluginAndDefaults();
   const instance2 = new BaseWithDefaultsAndPlugin();
