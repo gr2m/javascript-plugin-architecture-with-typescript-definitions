@@ -1,5 +1,4 @@
 import { Base } from "../../index.js";
-export { Base } from "../../index.js";
 
 declare module "../.." {
   namespace Base {
