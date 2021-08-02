@@ -21,23 +21,21 @@ declare type UnionToIntersection<Union> = (
   ? Intersection
   : never;
 declare type AnyFunction = (...args: any) => any;
-declare type ReturnTypeOf<
-  T extends AnyFunction | AnyFunction[]
-> = T extends AnyFunction
-  ? ReturnType<T>
-  : T extends AnyFunction[]
-  ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
-  : never;
+declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
+  T extends AnyFunction
+    ? ReturnType<T>
+    : T extends AnyFunction[]
+    ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
+    : never;
 
 type ClassWithPlugins = Constructor<any> & {
   plugins: Plugin[];
 };
 
-type RemainingRequirements<
-  PredefinedOptions
-> = keyof PredefinedOptions extends never
-  ? Base.Options
-  : Omit<Base.Options, keyof PredefinedOptions>;
+type RemainingRequirements<PredefinedOptions> =
+  keyof PredefinedOptions extends never
+    ? Base.Options
+    : Omit<Base.Options, keyof PredefinedOptions>;
 
 type NonOptionalKeys<Obj> = {
   [K in keyof Obj]: {} extends Pick<Obj, K> ? undefined : K;
@@ -163,11 +161,10 @@ type Extensions = {
 
 type OrObject<T, Extender> = T extends Extender ? {} : T;
 
-type ApplyPlugins<
-  Plugins extends Plugin[] | undefined
-> = Plugins extends Plugin[]
-  ? UnionToIntersection<ReturnType<Plugins[number]>>
-  : {};
+type ApplyPlugins<Plugins extends Plugin[] | undefined> =
+  Plugins extends Plugin[]
+    ? UnionToIntersection<ReturnType<Plugins[number]>>
+    : {};
 
 export type ExtendBaseWith<
   BaseClass extends Base,

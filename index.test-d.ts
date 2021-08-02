@@ -229,12 +229,11 @@ expectType<{
   defaultThree: string[];
 }>({ ...BaseWithManyChainedDefaultsAndPlugins.defaults });
 
-const baseWithManyChainedDefaultsAndPlugins = new BaseWithManyChainedDefaultsAndPlugins(
-  {
+const baseWithManyChainedDefaultsAndPlugins =
+  new BaseWithManyChainedDefaultsAndPlugins({
     required: "1.2.3",
     foo: "bar",
-  }
-);
+  });
 
 expectType<string>(baseWithManyChainedDefaultsAndPlugins.foo);
 expectType<string>(baseWithManyChainedDefaultsAndPlugins.bar);
