@@ -45,3 +45,10 @@ export async function test() {
     repo: "javascript-plugin-architecture-with-typescript-definitions",
   });
 }
+
+export async function testInstanceType(client: RestApiClient) {
+  client.request("GET /repos/{owner}/{repo}", {
+    owner: "gr2m",
+    repo: "javascript-plugin-architecture-with-typescript-definitions",
+  });
+}
