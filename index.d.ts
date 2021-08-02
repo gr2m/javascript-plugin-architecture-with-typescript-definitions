@@ -21,21 +21,23 @@ declare type UnionToIntersection<Union> = (
   ? Intersection
   : never;
 declare type AnyFunction = (...args: any) => any;
-declare type ReturnTypeOf<T extends AnyFunction | AnyFunction[]> =
-  T extends AnyFunction
-    ? ReturnType<T>
-    : T extends AnyFunction[]
-    ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
-    : never;
+declare type ReturnTypeOf<
+  T extends AnyFunction | AnyFunction[]
+> = T extends AnyFunction
+  ? ReturnType<T>
+  : T extends AnyFunction[]
+  ? UnionToIntersection<Exclude<ReturnType<T[number]>, void>>
+  : never;
 
 type ClassWithPlugins = Constructor<any> & {
   plugins: Plugin[];
 };
 
-type RemainingRequirements<PredefinedOptions> =
-  keyof PredefinedOptions extends never
-    ? Base.Options
-    : Omit<Base.Options, keyof PredefinedOptions>;
+type RemainingRequirements<
+  PredefinedOptions
+> = keyof PredefinedOptions extends never
+  ? Base.Options
+  : Omit<Base.Options, keyof PredefinedOptions>;
 
 type NonOptionalKeys<Obj> = {
   [K in keyof Obj]: {} extends Pick<Obj, K> ? undefined : K;
@@ -51,10 +53,7 @@ type RequiredIfRemaining<PredefinedOptions, NowProvided> = NonOptionalKeys<
         NowProvided
     ];
 
-type ConstructorRequiringOptionsIfNeeded<
-  Class extends ClassWithPlugins,
-  PredefinedOptions
-> = {
+type ConstructorRequiringOptionsIfNeeded<Class, PredefinedOptions> = {
   defaults: PredefinedOptions;
 } & {
   new <NowProvided>(
@@ -156,4 +155,30 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
 
   constructor(options: TOptions);
 }
+
+type Extensions = {
+  defaults?: {};
+  plugins?: Plugin[];
+};
+
+type OrObject<T, Extender> = T extends Extender ? {} : T;
+
+type ApplyPlugins<
+  Plugins extends Plugin[] | undefined
+> = Plugins extends Plugin[]
+  ? UnionToIntersection<ReturnType<Plugins[number]>>
+  : {};
+
+export type ExtendBaseWith<
+  BaseClass extends Base,
+  BaseExtensions extends Extensions
+> = BaseClass &
+  ConstructorRequiringOptionsIfNeeded<
+    BaseClass & ApplyPlugins<BaseExtensions["plugins"]>,
+    OrObject<BaseClass["options"], unknown>
+  > &
+  ApplyPlugins<BaseExtensions["plugins"]> & {
+    defaults: OrObject<BaseExtensions["defaults"], undefined>;
+  };
+
 export {};

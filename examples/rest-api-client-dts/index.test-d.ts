@@ -3,7 +3,9 @@ import { expectType } from "tsd";
 import { RestApiClient } from "./index.js";
 
 // @ts-expect-error - An argument for 'options' was not provided
-new RestApiClient();
+let value: typeof RestApiClient = new RestApiClient();
+
+expectType<{ userAgent: string }>(value.defaults);
 
 expectType<{ userAgent: string }>(RestApiClient.defaults);
 
