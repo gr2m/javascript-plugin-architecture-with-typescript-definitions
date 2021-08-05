@@ -1,5 +1,5 @@
 import { expectType } from "tsd";
-import { Base, Plugin } from "./index.js";
+import { Base, ExtendBaseWith, Plugin } from "./index.js";
 
 import { fooPlugin } from "./plugins/foo/index.js";
 import { barPlugin } from "./plugins/bar/index.js";
@@ -238,3 +238,48 @@ const baseWithManyChainedDefaultsAndPlugins =
 expectType<string>(baseWithManyChainedDefaultsAndPlugins.foo);
 expectType<string>(baseWithManyChainedDefaultsAndPlugins.bar);
 expectType<string>(baseWithManyChainedDefaultsAndPlugins.getFooOption());
+
+declare const RestApiClient: ExtendBaseWith<
+  Base,
+  {
+    defaults: {
+      defaultValue: string;
+    };
+    plugins: [
+      () => { pluginValueOne: number },
+      () => { pluginValueTwo: boolean }
+    ];
+  }
+>;
+
+expectType<string>(RestApiClient.defaults.defaultValue);
+
+// @ts-expect-error
+RestApiClient.defaults.unexpected;
+
+expectType<number>(RestApiClient.pluginValueOne);
+expectType<boolean>(RestApiClient.pluginValueTwo);
+
+// @ts-expect-error
+RestApiClient.unexpected;
+
+declare const MoreDefaultRestApiClient: ExtendBaseWith<
+  typeof RestApiClient,
+  {
+    defaults: {
+      anotherDefaultValue: number;
+    };
+  }
+>;
+
+expectType<string>(MoreDefaultRestApiClient.defaults.defaultValue);
+expectType<number>(MoreDefaultRestApiClient.defaults.anotherDefaultValue);
+
+declare const MorePluginRestApiClient: ExtendBaseWith<
+  typeof MoreDefaultRestApiClient,
+  {
+    plugins: [() => { morePluginValue: string[] }];
+  }
+>;
+
+expectType<string[]>(MorePluginRestApiClient.morePluginValue);
