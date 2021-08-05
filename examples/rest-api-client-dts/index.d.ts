@@ -11,3 +11,5 @@ export const RestApiClient: ExtendBaseWith<
     plugins: [typeof requestPlugin];
   }
 >;
+
+export type RestApiClient = typeof RestApiClient;
