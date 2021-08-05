@@ -51,10 +51,7 @@ type RequiredIfRemaining<PredefinedOptions, NowProvided> = NonOptionalKeys<
         NowProvided
     ];
 
-type ConstructorRequiringOptionsIfNeeded<
-  Class extends ClassWithPlugins,
-  PredefinedOptions
-> = {
+type ConstructorRequiringOptionsIfNeeded<Class, PredefinedOptions> = {
   defaults: PredefinedOptions;
 } & {
   new <NowProvided>(
@@ -156,4 +153,29 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
 
   constructor(options: TOptions);
 }
+
+type Extensions = {
+  defaults?: {};
+  plugins?: Plugin[];
+};
+
+type OrObject<T, Extender> = T extends Extender ? {} : T;
+
+type ApplyPlugins<Plugins extends Plugin[] | undefined> =
+  Plugins extends Plugin[]
+    ? UnionToIntersection<ReturnType<Plugins[number]>>
+    : {};
+
+export type ExtendBaseWith<
+  BaseClass extends Base,
+  BaseExtensions extends Extensions
+> = BaseClass &
+  ConstructorRequiringOptionsIfNeeded<
+    BaseClass & ApplyPlugins<BaseExtensions["plugins"]>,
+    OrObject<BaseClass["options"], unknown>
+  > &
+  ApplyPlugins<BaseExtensions["plugins"]> & {
+    defaults: OrObject<BaseExtensions["defaults"], undefined>;
+  };
+
 export {};

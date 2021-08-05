@@ -122,6 +122,40 @@ myBase.myMethod();
 myBase.myProperty;
 ```
 
+### TypeScript for a customized Base class
+
+If you write your `d.ts` files by hand instead of generating them from TypeScript source code, you can use the `ExtendBaseWith` Generic to create a class with custom defaults and plugins. It can even inherit from another customized class.
+
+```ts
+import { Base, ExtendBaseWith } from "../../index.js";
+
+import { myPlugin } from "./my-plugin.js";
+
+export const MyBase: ExtendBaseWith<
+  Base,
+  {
+    defaults: {
+      myPluginOption: string;
+    };
+    plugins: [typeof myPlugin];
+  }
+>;
+
+// support using the `MyBase` import to be used as a class instance type
+export type MyBase = typeof MyBase;
+```
+
+The last line is important in order to make `MyBase` behave like a class type, making the following code possible:
+
+```ts
+import { MyBase } from "./index.js";
+
+export async function testInstanceType(client: MyBase) {
+  // types set correctly on `client`
+  client.myPlugin({ myPluginOption: "foo" });
+}
+```
+
 ### Defaults
 
 TypeScript will not complain when chaining `.withDefaults()` calls endlessly: the static `.defaults` property will be set correctly. However, when instantiating from a class with 4+ chained `.withDefaults()` calls, then only the defaults from the first 3 calls are supported. See [#57](https://github.com/gr2m/javascript-plugin-architecture-with-typescript-definitions/pull/57) for details.

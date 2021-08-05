@@ -3,7 +3,9 @@ import { expectType } from "tsd";
 import { RestApiClient } from "./index.js";
 
 // @ts-expect-error - An argument for 'options' was not provided
-new RestApiClient();
+let value: typeof RestApiClient = new RestApiClient();
+
+expectType<{ userAgent: string }>(value.defaults);
 
 expectType<{ userAgent: string }>(RestApiClient.defaults);
 
@@ -38,6 +40,13 @@ export async function test() {
     data?: Record<string, unknown>;
   }>(getUserResponse);
 
+  client.request("GET /repos/{owner}/{repo}", {
+    owner: "gr2m",
+    repo: "javascript-plugin-architecture-with-typescript-definitions",
+  });
+}
+
+export async function testInstanceType(client: RestApiClient) {
   client.request("GET /repos/{owner}/{repo}", {
     owner: "gr2m",
     repo: "javascript-plugin-architecture-with-typescript-definitions",
