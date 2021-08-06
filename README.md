@@ -127,7 +127,7 @@ myBase.myProperty;
 If you write your `d.ts` files by hand instead of generating them from TypeScript source code, you can use the `ExtendBaseWith` Generic to create a class with custom defaults and plugins. It can even inherit from another customized class.
 
 ```ts
-import { Base, ExtendBaseWith } from "../../index.js";
+import { Base, ExtendBaseWith } from "javascript-plugin-architecture-with-typescript-definitions";
 
 import { myPlugin } from "./my-plugin.js";
 
