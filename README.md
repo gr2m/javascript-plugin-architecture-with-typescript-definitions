@@ -144,7 +144,7 @@ export const MyBase: ExtendBaseWith<
   }
 >;
 
-// support using the `MyBase` import to be used as a class instance type
+// support import to be used as a class instance type
 export type MyBase = typeof MyBase;
 ```
 
