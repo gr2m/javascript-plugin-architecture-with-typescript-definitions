@@ -24,7 +24,7 @@ import { myBarPlugin } from "./my-bar-plugin";
 export const MyBase = Base.withPlugins([myFooPlugin, myBarPlugin]).withDefaults(
   {
     foo: "bar",
-  }
+  },
 );
 ```
 

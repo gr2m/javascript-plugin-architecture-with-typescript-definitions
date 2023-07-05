@@ -2,7 +2,7 @@ import { Base } from "../../index.js";
 
 export function barPlugin(
   base: Base,
-  options: Base.Options
+  options: Base.Options,
 ): {
   bar: string;
 };

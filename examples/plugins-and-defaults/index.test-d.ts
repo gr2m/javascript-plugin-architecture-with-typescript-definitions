@@ -230,10 +230,10 @@ export async function test() {
     });
 
   expectType<() => Promise<string>>(
-    octokitWithManyChainedDefaultsAndPlugins.foo
+    octokitWithManyChainedDefaultsAndPlugins.foo,
   );
   expectType<string>(octokitWithManyChainedDefaultsAndPlugins.bar);
   expectType<string>(
-    octokitWithManyChainedDefaultsAndPlugins.getOptionalOption()
+    octokitWithManyChainedDefaultsAndPlugins.getOptionalOption(),
   );
 }

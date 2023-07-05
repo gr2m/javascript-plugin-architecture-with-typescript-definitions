@@ -206,7 +206,7 @@ const BaseWithChainedDefaultsAndPlugins = Base.withDefaults({
 const baseWithChainedDefaultsAndPlugins = new BaseWithChainedDefaultsAndPlugins(
   {
     required: "1.2.3",
-  }
+  },
 );
 
 expectType<string>(baseWithChainedDefaultsAndPlugins.foo);
@@ -247,7 +247,7 @@ declare const RestApiClient: ExtendBaseWith<
     };
     plugins: [
       () => { pluginValueOne: number },
-      () => { pluginValueTwo: boolean }
+      () => { pluginValueTwo: boolean },
     ];
   }
 >;
