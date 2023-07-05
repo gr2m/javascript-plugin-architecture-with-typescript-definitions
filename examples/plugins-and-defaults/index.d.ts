@@ -12,7 +12,7 @@ export const BaseWithDefaultsAndPlugins: ExtendBaseWith<
       typeof fooPlugin,
       typeof barPlugin,
       typeof voidPlugin,
-      typeof withOptionsPlugin
+      typeof withOptionsPlugin,
     ];
     defaults: {
       userAgent: "BaseWithDefaultsAndPlugins/1.0.0";

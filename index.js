@@ -10,7 +10,7 @@ export class Base {
     const currentPlugins = this.plugins;
     return class extends this {
       static plugins = currentPlugins.concat(
-        newPlugins.filter((plugin) => !currentPlugins.includes(plugin))
+        newPlugins.filter((plugin) => !currentPlugins.includes(plugin)),
       );
     };
   }

@@ -7,7 +7,7 @@ declare type ApiExtension = {
 };
 export declare type Plugin = (
   instance: Base,
-  options: Base.Options
+  options: Base.Options,
 ) => ApiExtension | void;
 
 declare type Constructor<T> = new (...args: any[]) => T;
@@ -48,7 +48,7 @@ type RequiredIfRemaining<PredefinedOptions, NowProvided> = NonOptionalKeys<
   : [
       Partial<Base.Options> &
         RemainingRequirements<PredefinedOptions> &
-        NowProvided
+        NowProvided,
     ];
 
 type ConstructorRequiringOptionsIfNeeded<Class, PredefinedOptions> = {
@@ -83,10 +83,10 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
    */
   static withPlugins<
     Class extends ClassWithPlugins,
-    Plugins extends [Plugin, ...Plugin[]]
+    Plugins extends [Plugin, ...Plugin[]],
   >(
     this: Class,
-    plugins: Plugins
+    plugins: Plugins,
   ): Class & {
     plugins: [...Class["plugins"], ...Plugins];
   } & Constructor<UnionToIntersection<ReturnTypeOf<Plugins>>>;
@@ -110,21 +110,21 @@ export declare class Base<TOptions extends Base.Options = Base.Options> {
   static withDefaults<
     PredefinedOptionsOne,
     ClassOne extends Constructor<Base<Base.Options & PredefinedOptionsOne>> &
-      ClassWithPlugins
+      ClassWithPlugins,
   >(
     this: ClassOne,
-    defaults: PredefinedOptionsOne
+    defaults: PredefinedOptionsOne,
   ): ConstructorRequiringOptionsIfNeeded<ClassOne, PredefinedOptionsOne> & {
     withDefaults<ClassTwo, PredefinedOptionsTwo>(
       this: ClassTwo,
-      defaults: PredefinedOptionsTwo
+      defaults: PredefinedOptionsTwo,
     ): ConstructorRequiringOptionsIfNeeded<
       ClassOne & ClassTwo,
       PredefinedOptionsOne & PredefinedOptionsTwo
     > & {
       withDefaults<ClassThree, PredefinedOptionsThree>(
         this: ClassThree,
-        defaults: PredefinedOptionsThree
+        defaults: PredefinedOptionsThree,
       ): ConstructorRequiringOptionsIfNeeded<
         ClassOne & ClassTwo & ClassThree,
         PredefinedOptionsOne & PredefinedOptionsTwo & PredefinedOptionsThree
@@ -168,7 +168,7 @@ type ApplyPlugins<Plugins extends Plugin[] | undefined> =
 
 export type ExtendBaseWith<
   BaseClass extends Base,
-  BaseExtensions extends Extensions
+  BaseExtensions extends Extensions,
 > = BaseClass &
   ConstructorRequiringOptionsIfNeeded<
     BaseClass & ApplyPlugins<BaseExtensions["plugins"]>,

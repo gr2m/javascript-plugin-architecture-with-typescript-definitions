@@ -2,7 +2,7 @@ import { Base } from "../../../../index.js";
 
 export function fooPlugin(
   base: Base,
-  options: Base.Options
+  options: Base.Options,
 ): {
   foo: () => Promise<string>;
 };

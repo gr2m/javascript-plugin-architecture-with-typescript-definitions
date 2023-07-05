@@ -11,7 +11,7 @@ declare module "../.." {
 
 export function withOptionsPlugin(
   base: Base,
-  options: Base.Options
+  options: Base.Options,
 ): {
   getFooOption: () => Required<Base.Options>["foo"];
 };

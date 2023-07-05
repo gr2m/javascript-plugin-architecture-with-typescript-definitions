@@ -42,7 +42,7 @@ interface RequestInterface {
 
 export declare function requestPlugin(
   base: Base,
-  options: Base.Options
+  options: Base.Options,
 ): {
   request: RequestInterface;
 };
